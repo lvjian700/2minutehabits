@@ -29,6 +29,7 @@ const SUGGESTIONS = [
 const App: React.FC = () => {
   const [habits, setHabits] = useLocalStorage<Habit[]>('habitTrackerData', []);
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
+  const [debugOpen, setDebugOpen] = useState(false);
 
   const saveHabits = (newHabits: Omit<Habit, 'logs'>[]) => {
     const formatted = newHabits.map(h => ({ ...h, logs: {} }));
@@ -47,8 +48,19 @@ const App: React.FC = () => {
     );
   };
 
+  // Clear all habit data for debugging
+  const handleClearData = () => {
+    if (confirm('Clear all habit data? This cannot be undone.')) {
+      localStorage.removeItem('habitTrackerData');
+      setHabits([]);
+      setSelectedHabitId(null);
+      setDebugOpen(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen p-4">
+    <>
+      <div className="min-h-screen p-4">
       <h1 className="text-3xl text-center font-semibold mb-6 text-gray-900">Habit Tracker</h1>
       {habits.length === 0 && (
         <SetupModal
@@ -109,7 +121,27 @@ const App: React.FC = () => {
           )}
         </div>
       )}
-    </div>
+      </div>
+      {/* Debug menu: clear local storage */}
+      <div className="fixed bottom-4 left-4 z-50">
+      <button
+        onClick={() => setDebugOpen(open => !open)}
+        className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full shadow-lg transition"
+      >
+        ⚙️
+      </button>
+      {debugOpen && (
+        <div className="mt-2 bg-white border border-gray-200 rounded shadow-lg">
+          <button
+            onClick={handleClearData}
+            className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+          >
+            Clear Data
+          </button>
+        </div>
+      )}
+      </div>
+    </>
   );
 };
 
