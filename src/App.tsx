@@ -13,6 +13,7 @@ export interface Habit {
 }
 
 // Predefined habit suggestions for onboarding
+// Predefined habit suggestions for onboarding (single-emoji icons)
 const SUGGESTIONS = [
   { name: 'Fitness', icon: '🏋️' },
   { name: 'Running', icon: '🏃' },
@@ -20,7 +21,8 @@ const SUGGESTIONS = [
   { name: 'Writing', icon: '✍️' },
   { name: 'Prioritize Sleep', icon: '😴' },
   { name: 'Reading', icon: '📖' },
-  { name: 'No Sugar', icon: '🚫🍭' },
+  // Use a single sugar icon for the 'No Sugar' habit
+  { name: 'No Sugar', icon: '🍭' },
   { name: 'No Smoking', icon: '🚭' }
 ];
 
