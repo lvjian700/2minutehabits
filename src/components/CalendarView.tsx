@@ -48,29 +48,34 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
 
   return (
     <div>
+      {/* Month navigation */}
       <div className="flex justify-between items-center mb-4">
         <button
-          className="px-2 py-1 bg-blue-500 text-white rounded"
+          className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
           onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
         >
-          {'<'}
+          &lt;
         </button>
-        <div className="font-semibold">
+        <div className="text-lg font-medium text-gray-800">
           {currentDate.toLocaleString('default', { month: 'long' })} {year}
         </div>
         <button
-          className="px-2 py-1 bg-blue-500 text-white rounded"
+          className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
           onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
         >
-          {'>'}
+          &gt;
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-1">{generateCalendar()}</div>
+      {/* Calendar grid */}
+      <div className="grid grid-cols-7 gap-2 text-sm">
+        {generateCalendar()}
+      </div>
+      {/* Back to dashboard */}
       <button
-        className="mt-4 text-blue-500"
-        onClick={() => onClose()}
+        className="mt-4 text-gray-600 hover:text-gray-800 text-sm"
+        onClick={onClose}
       >
-        Close
+        &larr; Back to Dashboard
       </button>
     </div>
   );

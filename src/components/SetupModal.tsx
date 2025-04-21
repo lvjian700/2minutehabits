@@ -63,19 +63,21 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md">
-        <h2 className="text-xl mb-4">Select up to {maxSelectable} Habits</h2>
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+          Choose up to {maxSelectable} Habits
+        </h2>
         <div className="grid grid-cols-2 gap-3 mb-4">
           {suggestions.map((s, idx) => (
             <div
               key={idx}
-              className={`flex items-center p-2 border rounded cursor-pointer ${
-                selectedIndices.includes(idx)
-                  ? 'border-blue-500 bg-blue-100'
-                  : 'border-gray-300'
-              }`}
               onClick={() => toggleIndex(idx)}
+              className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
+                selectedIndices.includes(idx)
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-gray-300 hover:bg-gray-100'
+              }`}
             >
               <span className="text-2xl mr-2">{s.icon}</span>
               <span>{s.name}</span>
@@ -83,23 +85,23 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
           ))}
         </div>
         <div className="flex justify-between">
-        <button
-          className="px-4 py-2 bg-gray-300 rounded"
-          onClick={handleRandomize}
-        >
-          Randomize
-        </button>
-        <button
-          className={`px-4 py-2 rounded text-white ${
-            selectedIndices.length > 0
-              ? 'bg-blue-500'
-              : 'bg-gray-400 cursor-not-allowed'
-          }`}
-          onClick={handleSave}
-          disabled={selectedIndices.length === 0}
-        >
-          Ready to Start
-        </button>
+          <button
+            onClick={handleRandomize}
+            className="px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+          >
+            Randomize
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={selectedIndices.length === 0}
+            className={`px-4 py-2 rounded text-sm font-medium transition-colors focus:outline-none ${
+              selectedIndices.length > 0
+                ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            Ready to Start
+          </button>
         </div>
       </div>
     </div>

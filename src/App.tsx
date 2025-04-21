@@ -46,8 +46,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl text-center mb-4">Habit Tracker</h1>
+    <div className="min-h-screen p-4">
+      <h1 className="text-3xl text-center font-semibold mb-6 text-gray-900">Habit Tracker</h1>
       {habits.length === 0 && (
         <SetupModal
           suggestions={SUGGESTIONS}
