@@ -59,7 +59,7 @@ const App: React.FC = () => {
         />
       )}
       {habits.length > 0 && (
-        <div className="relative max-w-4xl mx-auto flex transition-all duration-500">
+        <div className="relative max-w-4xl mx-auto flex flex-col sm:flex-row transition-all duration-500">
           {/* Left panel: grid view or summary list on calendar open */}
           <div
             className={`transition-all duration-500 ${
@@ -83,7 +83,7 @@ const App: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col space-y-2 p-2 bg-gray-50 rounded">
+              <div className="flex flex-wrap flex-row sm:flex-col space-x-2 sm:space-y-2 py-1 px-2 bg-gray-50 rounded overflow-x-auto sm:overflow-visible">
                 {habits.map(habit => (
                   <HabitSummary
                     key={habit.id}
@@ -97,7 +97,7 @@ const App: React.FC = () => {
           </div>
           {/* Right panel: calendar view */}
           {selectedHabitId !== null && (
-            <div className="transition-all duration-500 w-full sm:w-3/4 bg-white shadow-lg p-4 ml-4">
+            <div className="transition-all duration-500 w-full sm:w-3/4 bg-white shadow-lg p-4 mt-4 sm:mt-0 sm:ml-4">
               <CalendarView
                 habit={habits.find(h => h.id === selectedHabitId)!}
                 onToggle={date =>
