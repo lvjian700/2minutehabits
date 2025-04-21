@@ -11,7 +11,7 @@ const HabitSummary: React.FC<HabitSummaryProps> = ({ habit, isActive, onSelect }
   return (
     <div
       onClick={onSelect}
-      className={`flex items-center py-1 px-2 sm:py-3 sm:px-4 border-l-4 cursor-pointer rounded-lg transition-colors ${
+      className={`flex items-center py-1 px-2 sm:py-3 sm:px-4 border-t-4 sm:border-l-4 sm:border-t-0 cursor-pointer rounded-lg transition-colors ${
         isActive
           ? 'border-blue-500 bg-blue-50 text-gray-900'
           : 'border-transparent hover:bg-gray-100 text-gray-700'
