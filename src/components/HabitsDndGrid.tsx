@@ -52,30 +52,14 @@ function SortableHabitCard({ habit, idx, onToggle, onSelect }: SortableHabitCard
         onToggle={() => onToggle(habit.id)}
         onSelect={() => onSelect(habit.id)}
         order={idx}
+        dragHandleProps={{
+          ...listeners,
+          onTouchStart: () => { if (typeof document !== 'undefined') document.body.style.userSelect = 'none'; },
+          onTouchEnd: () => { if (typeof document !== 'undefined') document.body.style.userSelect = ''; },
+          onTouchCancel: () => { if (typeof document !== 'undefined') document.body.style.userSelect = ''; },
+        }}
       />
-      {/* Drag handle on right */}
-      <button
-        type="button"
-        tabIndex={0}
-        aria-label="Drag to reorder"
-        className="absolute top-1/2 left-2 -translate-y-1/2 h-10 p-1 rounded cursor-grab active:cursor-grabbing bg-white shadow border border-gray-200 hover:bg-gray-100 z-10
-          flex items-center justify-center
-          sm:opacity-0 sm:group-hover:opacity-100 sm:transition-opacity opacity-100"
-        onTouchStart={() => { if (typeof document !== 'undefined') document.body.style.userSelect = 'none'; }}
-        onTouchEnd={() => { if (typeof document !== 'undefined') document.body.style.userSelect = ''; }}
-        onTouchCancel={() => { if (typeof document !== 'undefined') document.body.style.userSelect = ''; }}
-        {...listeners}
-      >
-        {/* SVG drag icon */}
-        <svg width="20" height="32" viewBox="0 0 20 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="7" cy="8" r="1.5" fill="#888"/>
-          <circle cx="13" cy="8" r="1.5" fill="#888"/>
-          <circle cx="7" cy="16" r="1.5" fill="#888"/>
-          <circle cx="13" cy="16" r="1.5" fill="#888"/>
-          <circle cx="7" cy="24" r="1.5" fill="#888"/>
-          <circle cx="13" cy="24" r="1.5" fill="#888"/>
-        </svg>
-      </button>
+
     </div>
   );
 }
