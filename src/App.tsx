@@ -80,7 +80,7 @@ const App: React.FC = () => {
           >
             {selectedHabitId === null ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {habits.map(habit => (
+                {habits.map((habit, idx) => (
                   <HabitCard
                     key={habit.id}
                     habit={habit}
@@ -91,6 +91,7 @@ const App: React.FC = () => {
                       )
                     }
                     onSelect={() => setSelectedHabitId(habit.id)}
+                    order={idx}
                   />
                 ))}
               </div>

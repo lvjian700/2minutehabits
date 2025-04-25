@@ -5,6 +5,7 @@ interface HabitCardProps {
   habit: Habit;
   onToggle: () => void;
   onSelect: () => void;
+  order?: number; // 1-based order index, optional
 }
 
 const calculateStreaks = (logs: Record<string, boolean>) => {
@@ -34,14 +35,27 @@ const calculateStreaks = (logs: Record<string, boolean>) => {
   return { current, max: maxStreak, completedToday: !!logs[todayStr] };
 };
 
-const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect }) => {
+const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order }) => {
   const { current, max, completedToday } = calculateStreaks(habit.logs);
 
   return (
     <div
       onClick={onSelect}
-      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col items-center cursor-pointer"
+      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col items-center cursor-pointer relative"
     >
+      {typeof order === 'number' && (
+        <span
+          className="absolute top-2 left-2 bg-gray-200 text-gray-700 text-xs font-semibold rounded-full px-2 py-0.5 select-none shadow-sm"
+          style={{
+            minWidth: 20,
+            textAlign: 'center',
+            opacity: 0.95,
+            letterSpacing: '0.05em',
+          }}
+        >
+          {order + 1}
+        </span>
+      )}
       <div className="text-5xl mb-3">{habit.icon}</div>
       <div className="text-xl font-semibold mb-2 text-gray-800">{habit.name}</div>
       <div className="mb-4 text-center text-gray-600">

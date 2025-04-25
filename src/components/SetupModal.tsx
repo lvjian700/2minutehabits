@@ -43,10 +43,12 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
       alert(`Please select at least one habit.`);
       return;
     }
+    // The order of habits is now the user-selected order
     const newHabits = selectedIndices.map((idx, i) => ({
       id: Date.now() + i,
       name: suggestions[idx].name,
-      icon: suggestions[idx].icon
+      icon: suggestions[idx].icon,
+      // Optionally, you could add order: i here if needed in the future
     }));
     onSave(newHabits);
   };
@@ -69,20 +71,36 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
           Choose up to {maxSelectable} Habits
         </h2>
         <div className="grid grid-cols-2 gap-3 mb-4">
-          {suggestions.map((s, idx) => (
-            <div
-              key={idx}
-              onClick={() => toggleIndex(idx)}
-              className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
-                selectedIndices.includes(idx)
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-300 hover:bg-gray-100'
-              }`}
-            >
-              <span className="text-2xl mr-2">{s.icon}</span>
-              <span>{s.name}</span>
-            </div>
-          ))}
+          {suggestions.map((s, idx) => {
+            const selectedOrder = selectedIndices.indexOf(idx);
+            return (
+              <div
+                key={idx}
+                onClick={() => toggleIndex(idx)}
+                className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors relative ${
+                  selectedOrder !== -1
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-300 hover:bg-gray-100'
+                }`}
+              >
+                <span className="text-2xl mr-2">{s.icon}</span>
+                <span>{s.name}</span>
+                {selectedOrder !== -1 && (
+                  <span
+                    className="ml-auto bg-gray-200 text-gray-700 text-xs font-semibold rounded-full px-2 py-0.5 select-none shadow-sm"
+                    style={{
+                      minWidth: 20,
+                      textAlign: 'center',
+                      opacity: 0.95,
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    {selectedOrder + 1}
+                  </span>
+                )}
+              </div>
+            );
+          })}
         </div>
         <div className="flex justify-between">
           <button
