@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import HabitsDndGrid from './components/HabitsDndGrid';
 import useLocalStorage from './hooks/useLocalStorage';
 import SetupModal from './components/SetupModal';
 import HabitCard from './components/HabitCard';
@@ -47,6 +48,23 @@ const App: React.FC = () => {
       })
     );
   };
+  
+  // Handle drag end for reordering habits
+  const handleDragEnd = (result: DropResult) => {
+    // Drop outside the list or no destination
+    if (!result.destination) return;
+    
+    // If the item was dropped in the same position, do nothing
+    if (result.destination.index === result.source.index) return;
+    
+    // Reorder the habits array
+    const reorderedHabits = Array.from(habits);
+    const [movedHabit] = reorderedHabits.splice(result.source.index, 1);
+    reorderedHabits.splice(result.destination.index, 0, movedHabit);
+    
+    // Update the habits state with the new order
+    setHabits(reorderedHabits);
+  };
 
   // Clear all habit data for debugging
   const handleClearData = () => {
@@ -79,22 +97,17 @@ const App: React.FC = () => {
             }`}
           >
             {selectedHabitId === null ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {habits.map((habit, idx) => (
-                  <HabitCard
-                    key={habit.id}
-                    habit={habit}
-                    onToggle={() =>
-                      toggleLog(
-                        habit.id,
-                        new Date().toISOString().split('T')[0]
-                      )
-                    }
-                    onSelect={() => setSelectedHabitId(habit.id)}
-                    order={idx}
-                  />
-                ))}
-              </div>
+              <HabitsDndGrid
+                habits={habits}
+                onReorder={setHabits}
+                onToggle={(habitId) =>
+                  toggleLog(
+                    habitId,
+                    new Date().toISOString().split('T')[0]
+                  )
+                }
+                onSelect={setSelectedHabitId}
+              />
             ) : (
               <div className="flex flex-wrap flex-row sm:flex-col space-x-2 sm:space-y-2 py-1 px-2 bg-gray-50 rounded overflow-x-auto sm:overflow-visible">
                 {habits.map(habit => (
