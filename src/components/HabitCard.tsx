@@ -26,33 +26,6 @@ interface HabitCardProps {
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-const calculateStreaks = (logs: Record<string, boolean>) => {
-  const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
-
-  let current = 0;
-  let d = new Date();
-  while (logs[d.toISOString().split('T')[0]]) {
-    current++;
-    d.setDate(d.getDate() - 1);
-  }
-
-  let maxStreak = 0;
-  let temp = 0;
-  Object.keys(logs)
-    .sort()
-    .forEach(date => {
-      if (logs[date]) {
-        temp++;
-        maxStreak = Math.max(maxStreak, temp);
-      } else {
-        temp = 0;
-      }
-    });
-
-  return { current, max: maxStreak, completedToday: !!logs[todayStr] };
-};
-
 const priorityColors = [
   'bg-red-100 text-red-800',
   'bg-orange-100 text-orange-800',

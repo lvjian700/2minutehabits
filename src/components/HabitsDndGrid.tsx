@@ -19,17 +19,6 @@ interface SortableHabitCardProps {
   onSelect: (id: number) => void;
 }
 
-function isTouchDevice() {
-  if (typeof window !== 'undefined') {
-    return (
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      navigator.userAgent.toLowerCase().includes('mobi')
-    );
-  }
-  return false;
-}
-
 function SortableHabitCard({ habit, idx, onToggle, onSelect }: SortableHabitCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: habit.id });
 
@@ -54,9 +43,6 @@ function SortableHabitCard({ habit, idx, onToggle, onSelect }: SortableHabitCard
         order={idx}
         dragHandleProps={{
           ...listeners,
-          onTouchStart: () => { if (typeof document !== 'undefined') document.body.style.userSelect = 'none'; },
-          onTouchEnd: () => { if (typeof document !== 'undefined') document.body.style.userSelect = ''; },
-          onTouchCancel: () => { if (typeof document !== 'undefined') document.body.style.userSelect = ''; },
         }}
       />
 

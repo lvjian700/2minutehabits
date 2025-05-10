@@ -1,32 +1,5 @@
 import React, { useState } from 'react';
 import { Habit } from '../App';
-import { GripVertical } from 'lucide-react';
-import classNames from 'classnames';
-  
-// Fallback Card, CardContent, Button, Badge implementations
-const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => (
-  <div className={classNames('rounded-2xl shadow-md bg-white relative overflow-hidden border border-gray-200 group transition-all', className)} {...props}>{children}</div>
-);
-const CardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => (
-  <div className={classNames('p-6 flex flex-col', className)} {...props}>{children}</div>
-);
-const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: string }> = ({ className, children, variant, ...props }) => (
-  <button className={classNames('px-4 py-2 rounded-full text-sm font-medium transition-colors duration-150 focus:outline-none',
-    variant === 'secondary' ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : '',
-    variant === 'ghost' ? 'bg-transparent hover:bg-gray-200 text-gray-700' : '',
-    variant === 'link' ? 'underline text-blue-600 hover:text-blue-800 bg-transparent px-0 py-0' : '',
-    className)} {...props}>{children}</button>
-);
-const Badge: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({ className, children, ...props }) => (
-  <span className={classNames('px-2 py-0.5 rounded-full text-xs font-semibold', className)} {...props}>{children}</span>
-);
-
-const priorityColors = [
-  'bg-red-100 text-red-800',
-  'bg-orange-100 text-orange-800',
-  'bg-yellow-100 text-yellow-800',
-  'bg-blue-100 text-blue-800',
-];
 
 interface CalendarViewProps {
   habit: Habit;
