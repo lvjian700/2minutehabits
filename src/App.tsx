@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import HabitsDndGrid from './components/HabitsDndGrid';
 import useLocalStorage from './hooks/useLocalStorage';
 import SetupModal from './components/SetupModal';
-import HabitCard from './components/HabitCard';
 import HabitSummary from './components/HabitSummary';
 import CalendarView from './components/CalendarView';
 
@@ -49,23 +48,6 @@ const App: React.FC = () => {
     );
   };
   
-  // Handle drag end for reordering habits
-  const handleDragEnd = (result: DropResult) => {
-    // Drop outside the list or no destination
-    if (!result.destination) return;
-    
-    // If the item was dropped in the same position, do nothing
-    if (result.destination.index === result.source.index) return;
-    
-    // Reorder the habits array
-    const reorderedHabits = Array.from(habits);
-    const [movedHabit] = reorderedHabits.splice(result.source.index, 1);
-    reorderedHabits.splice(result.destination.index, 0, movedHabit);
-    
-    // Update the habits state with the new order
-    setHabits(reorderedHabits);
-  };
-
   // Clear all habit data for debugging
   const handleClearData = () => {
     if (confirm('Clear all habit data? This cannot be undone.')) {
