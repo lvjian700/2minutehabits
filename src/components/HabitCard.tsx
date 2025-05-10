@@ -7,7 +7,7 @@ const CardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className
   <div className={classNames('p-6 flex flex-col items-center', className)} {...props}>{children}</div>
 );
 const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: string }> = ({ className, children, variant, ...props }) => (
-  <button className={classNames('px-4 py-2 rounded-full text-sm font-medium transition-colors duration-150 focus:outline-none',
+  <button className={classNames('px-4 py-2 rounded-full text- font-medium transition-colors duration-150 focus:outline-none',
     variant === 'secondary' ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : '',
     className)} {...props}>{children}</button>
 );
@@ -80,7 +80,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
       <CardContent className="p-6 flex flex-col items-center">
         {/* Drag handle (for DnD grid, always visible on mobile, hover on desktop) */}
         {dragHandleProps && (
-          <div className="absolute top-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" {...dragHandleProps}>
+          <div className="absolute top-2 right-2 opacity-100 opacity-0 group-hover:opacity-100 transition-opacity" {...dragHandleProps}>
             <GripVertical className="h-5 w-5 text-gray-400 cursor-grab" />
           </div>
         )}
@@ -92,7 +92,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
         )}
         <div className="text-5xl mb-2">{emoji}</div>
         <h2 className="text-xl font-semibold text-gray-900 mb-2 text-center">{habit.name}</h2>
-        <div className="text-gray-600 text-sm mb-4">
+        <div className="text-gray-600 text- mb-4">
           <p><span className="font-medium">Streak:</span> {streak}</p>
           <p><span className="font-medium">Max:</span> {max}</p>
         </div>

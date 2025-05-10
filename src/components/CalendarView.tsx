@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Habit } from '../App';
 import { GripVertical } from 'lucide-react';
 import classNames from 'classnames';
+
 // Fallback Card, CardContent, Button, Badge implementations
 const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => (
   <div className={classNames('rounded-2xl shadow-md bg-white relative overflow-hidden border border-gray-200 group transition-all', className)} {...props}>{children}</div>
@@ -58,7 +59,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
         <div
           key={dateStr}
           onClick={() => onToggle(dateStr)}
-          className={`p-1 sm:p-2 text-center rounded cursor-pointer transition-colors ${completed ? 'bg-green-500 text-white' : 'hover:bg-gray-100'
+          className={`p-1 p-2 text-center rounded cursor-pointer transition-colors ${completed ? 'bg-green-500 text-white' : 'hover:bg-gray-100'
             } ${isToday ? 'border-2 border-blue-500' : ''}`}
         >
           {d}
@@ -90,7 +91,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
       </div>
       {/* Calendar grid: horizontal-scrollable on mobile */}
       <div className="overflow-x-auto">
-        <div className="min-w-[280px] sm:min-w-full grid grid-cols-7 gap-1 sm:gap-2 text-xs sm:text-sm">
+        <div className="min-w-[280px] min-w-full grid grid-cols-7 gap-1 gap-2 text-xs text-sm">
           {generateCalendar()}
         </div>
       </div>
