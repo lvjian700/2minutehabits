@@ -99,7 +99,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
         {status === 'complete' ? (
           <Button variant="secondary" disabled>Completed</Button>
         ) : (
-          <Button className={classNames(priorityColors[order ? order % priorityColors.length : 0], 'hover:brightness-110')} onClick={onToggle}>
+          <Button className={classNames(priorityColors[order ? order % priorityColors.length : 0], 'hover:brightness-110')} onClick={e => { e.stopPropagation(); onToggle(); }}>
             Mark Complete
           </Button>
         )}
