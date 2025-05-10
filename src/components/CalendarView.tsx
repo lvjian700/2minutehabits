@@ -45,7 +45,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
   const generateCalendar = () => {
     const cells: JSX.Element[] = [];
     ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
-      cells.push(<div key={day} className="font-bold text-center text-base">{day}</div>);
+      cells.push(<div key={day} className="text-center text-medium text-gray-500">{day}</div>);
     });
     for (let i = 0; i < startDay; i++) {
       cells.push(<div key={'empty-' + i} />);
@@ -73,7 +73,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
       {/* Month navigation */}
       <div className="flex justify-between items-center mb-4">
         <button
-          className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
+          className="px-3 py-1 text-gray-700 rounded hover:bg-gray-300 transition-colors"
           onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
         >
           &lt;
@@ -82,7 +82,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
           {currentDate.toLocaleString('default', { month: 'long' })} {year}
         </div>
         <button
-          className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
+          className="px-3 py-1 text-gray-700 rounded hover:bg-gray-300 transition-colors"
           onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
         >
           &gt;
@@ -90,7 +90,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
       </div>
       {/* Calendar grid: horizontal-scrollable on mobile */}
       <div className="overflow-x-auto">
-        <div className="min-w-[280px] min-w-full grid grid-cols-7 gap-1 gap-2 text-xs text-sm">
+        <div className="min-w-[280px] min-w-full grid grid-cols-7 gap-1 gap-2 text-xs">
           {generateCalendar()}
         </div>
       </div>
