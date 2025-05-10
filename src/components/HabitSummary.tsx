@@ -12,7 +12,7 @@ const HabitSummary: React.FC<HabitSummaryProps> = ({ habit, isActive, onSelect }
     <div
       onClick={onSelect}
       className={`flex items-center
-        py-1 px-2 px-4 gap-2 
+        py-2 px-4 gap-2 
         cursor-pointer rounded-lg
         ${isActive ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100' }`}
     >

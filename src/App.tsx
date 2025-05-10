@@ -109,7 +109,7 @@ const App: React.FC = () => {
                 onSelect={setSelectedHabitId}
               />
             ) : (
-              <div className="flex flex-wrap flex-row sm:flex-col space-x-2 sm:space-y-2 py-1 px-2 bg-gray-50 rounded overflow-x-auto sm:overflow-visible">
+              <div className="flex flex-col gap-2 font-medium">
                 {habits.map(habit => (
                   <HabitSummary
                     key={habit.id}
