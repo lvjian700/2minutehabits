@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Habit } from '../App';
 import { GripVertical } from 'lucide-react';
 import classNames from 'classnames';
-
+  
 // Fallback Card, CardContent, Button, Badge implementations
 const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => (
   <div className={classNames('rounded-2xl shadow-md bg-white relative overflow-hidden border border-gray-200 group transition-all', className)} {...props}>{children}</div>
@@ -45,7 +45,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
   const generateCalendar = () => {
     const cells: JSX.Element[] = [];
     ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
-      cells.push(<div key={day} className="font-bold text-center">{day}</div>);
+      cells.push(<div key={day} className="font-bold text-center text-base">{day}</div>);
     });
     for (let i = 0; i < startDay; i++) {
       cells.push(<div key={'empty-' + i} />);
@@ -59,8 +59,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
         <div
           key={dateStr}
           onClick={() => onToggle(dateStr)}
-          className={`p-1 p-2 text-center rounded cursor-pointer transition-colors ${completed ? 'bg-green-500 text-white' : 'hover:bg-gray-100'
-            } ${isToday ? 'border-2 border-blue-500' : ''}`}
+          className={`p-2 text-center rounded cursor-pointer transition-colors text-sm ${completed ? 'bg-green-500 text-white' : 'hover:bg-gray-100'} ${isToday ? 'border-2 border-blue-500' : ''}`}
         >
           {d}
         </div>
