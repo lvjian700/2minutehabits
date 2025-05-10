@@ -43,11 +43,11 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
 
   const generateCalendar = () => {
     const cells: JSX.Element[] = [];
-    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(day => {
+    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
       cells.push(<div key={day} className="font-bold text-center">{day}</div>);
     });
     for (let i = 0; i < startDay; i++) {
-      cells.push(<div key={'empty-'+i} />);
+      cells.push(<div key={'empty-' + i} />);
     }
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month, d);
@@ -58,9 +58,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
         <div
           key={dateStr}
           onClick={() => onToggle(dateStr)}
-          className={`p-1 sm:p-2 text-center rounded cursor-pointer transition-colors ${
-            completed ? 'bg-green-500 text-white' : 'hover:bg-gray-100'
-          } ${isToday ? 'border-2 border-blue-500' : ''}`}
+          className={`p-1 sm:p-2 text-center rounded cursor-pointer transition-colors ${completed ? 'bg-green-500 text-white' : 'hover:bg-gray-100'
+            } ${isToday ? 'border-2 border-blue-500' : ''}`}
         >
           {d}
         </div>
