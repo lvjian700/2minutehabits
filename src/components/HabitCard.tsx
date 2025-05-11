@@ -34,11 +34,16 @@ const priorityColors = [
 ];
 
 const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order, dragHandleProps }) => {
-  // Fallbacks for compatibility with old and new habit shape
+  // Compute completion status for today directly from logs
+  const todayStr = new Date().toISOString().split('T')[0];
+  const completedToday = habit.logs && habit.logs[todayStr];
+  const status = completedToday ? 'complete' : 'incomplete';
+  const emoji = (habit as any).emoji ?? (habit as any).icon ?? '🏆';
+
+  // Optionally, you can also compute streak and max here if needed for display
+  // For now, keep the fallback values for streak and max
   const streak = (habit as any).streak ?? 0;
   const max = (habit as any).max ?? 0;
-  const status = (habit as any).status ?? ((habit as any).completedToday ? 'complete' : 'incomplete');
-  const emoji = (habit as any).emoji ?? (habit as any).icon ?? '🏆';
 
   return (
     <Card
@@ -72,7 +77,8 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
         {status === 'complete' ? (
           <Button variant="secondary" disabled>Completed</Button>
         ) : (
-          <Button className={classNames(priorityColors[order ? order % priorityColors.length : 0], 'hover:brightness-110')} onClick={e => { e.stopPropagation(); onToggle(); }}>
+          <Button className={classNames(priorityColors[order ? order % priorityColors.length : 0], 'hover:brightness-110')} 
+            onClick={e => { e.stopPropagation(); onToggle(); }}>
             Mark Complete
           </Button>
         )}
