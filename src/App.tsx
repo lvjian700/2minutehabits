@@ -20,7 +20,7 @@ const SUGGESTIONS = [
   { name: 'Running', icon: '🏃' },
   { name: 'Meditation', icon: '🧘' },
   { name: 'Writing', icon: '✍️' },
-  { name: 'Prioritize Sleep', icon: '😴' },
+  { name: 'Wind Down for Sleep', icon: '🌙' },
   { name: 'Reading', icon: '📖' },
   // Use a single sugar icon for the 'No Sugar' habit
   { name: 'No Sugar', icon: '🍭' },
