@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { Habit } from '../types/Habit';
 
 interface Suggestion {
   name: string;
@@ -10,7 +11,7 @@ interface SetupModalProps {
   maxSelectable: number;
   /** Number of habits to randomly pre-select and randomize count */
   defaultRandomCount: number;
-  onSave: (habits: { id: number; name: string; icon: string }[]) => void;
+  onSave: (habits: Omit<Habit, 'logs'>[]) => void;
 }
 
 const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, defaultRandomCount, onSave }) => {
@@ -48,7 +49,7 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
       id: Date.now() + i,
       name: suggestions[idx].name,
       icon: suggestions[idx].icon,
-      // Optionally, you could add order: i here if needed in the future
+      priority: i,
     }));
     onSave(newHabits);
   };

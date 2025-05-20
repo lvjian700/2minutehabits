@@ -1,19 +1,11 @@
 import React, { useState } from 'react';
+import type { Habit } from './types/Habit';
 import HabitsDndGrid from './components/HabitsDndGrid';
 import useLocalStorage from './hooks/useLocalStorage';
 import SetupModal from './components/SetupModal';
 import HabitSummary from './components/HabitSummary';
 import CalendarView from './components/CalendarView';
 
-export interface Habit {
-  id: number;
-  name: string;
-  icon: string;
-  priority: number;
-  logs: Record<string, boolean>;
-}
-
-// Predefined habit suggestions for onboarding
 // Predefined habit suggestions for onboarding (single-emoji icons)
 const SUGGESTIONS = [
   { name: 'Fitness', icon: '🏋️' },
@@ -22,7 +14,6 @@ const SUGGESTIONS = [
   { name: 'Writing', icon: '✍️' },
   { name: 'Wind Down for Sleep', icon: '🌙' },
   { name: 'Reading', icon: '📖' },
-  // Use a single sugar icon for the 'No Sugar' habit
   { name: 'No Sugar', icon: '🍭' },
   { name: 'No Smoking', icon: '🚭' }
 ];

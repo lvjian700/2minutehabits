@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Habit } from '../App';
+import type { Habit } from '../types/Habit';
 
 interface CalendarViewProps {
   habit: Habit;

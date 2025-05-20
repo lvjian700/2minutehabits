@@ -1,5 +1,5 @@
 import React from 'react';
-import { Habit } from '../App';
+import type { Habit } from '../types/Habit';
 
 interface HabitSummaryProps {
   habit: Habit;
