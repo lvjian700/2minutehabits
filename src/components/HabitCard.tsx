@@ -40,10 +40,8 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
   const status = completedToday ? 'complete' : 'incomplete';
   const emoji = (habit as any).emoji ?? (habit as any).icon ?? '🏆';
 
-  // Optionally, you can also compute streak and max here if needed for display
-  // For now, keep the fallback values for streak and max
-  const streak = (habit as any).streak ?? 0;
-  const max = (habit as any).max ?? 0;
+  // Compute completed days from logs
+  const completedDays = habit.logs ? Object.values(habit.logs).filter(Boolean).length : 0;
 
   return (
     <Card
@@ -71,8 +69,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
         <div className="text-5xl mb-2">{emoji}</div>
         <h2 className="text-xl font-semibold text-gray-900 mb-2 text-center">{habit.name}</h2>
         <div className="text-gray-600 text- mb-4">
-          <p><span className="font-medium">Streak:</span> {streak}</p>
-          <p><span className="font-medium">Max:</span> {max}</p>
+          <p><span className="font-medium">Completed Days:</span> {completedDays}</p>
         </div>
         {status === 'complete' ? (
           <Button variant="secondary" disabled>Completed</Button>
