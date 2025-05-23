@@ -26,14 +26,24 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
     }
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month, d);
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = getLocalDateString(date);
       const completed = habit.logs[dateStr];
       const isToday = dateStr === todayStr;
+      
+      // Check if date is in the future
+      const isFutureDate = date > new Date();
+      
       cells.push(
         <div
           key={dateStr}
-          onClick={() => onToggle(dateStr)}
-          className={`p-2 text-center rounded cursor-pointer transition-colors text-sm ${completed ? 'bg-green-500 text-white' : 'hover:bg-gray-100'} ${isToday ? 'border-2 border-blue-500' : ''}`}
+          onClick={isFutureDate ? undefined : () => onToggle(dateStr)}
+          className={`p-2 text-center rounded transition-colors text-sm 
+            ${completed ? 'bg-green-500 text-white' : ''}
+            ${isToday ? 'border-2 border-blue-500' : ''}
+            ${isFutureDate 
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-50' 
+              : 'cursor-pointer hover:bg-gray-100'}`
+          }
         >
           {d}
         </div>
