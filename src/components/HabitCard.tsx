@@ -74,9 +74,9 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
           </div>
         )}
         <div className="text-5xl mb-2">{emoji}</div>
-        <h2 className="text-xl font-semibold text-color-title mb-2 text-center">{habit.name}</h2>
-        <div className="text-gray-600 text- mb-4">
-          <p><span className="font-medium">Completed Days:</span> {completedDays}</p>
+        <h2 className="text-subtitle text-color-title mb-2 text-center">{habit.name}</h2>
+        <div className="text-color-text mb-4">
+          <p className="text-body"><span className="font-medium">Completed Days:</span> {completedDays}</p>
         </div>
         {status === 'complete' ? (
           <Button variant="secondary" disabled>Completed</Button>

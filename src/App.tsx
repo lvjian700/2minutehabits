@@ -53,7 +53,7 @@ const App: React.FC = () => {
   return (
     <>
       <div className="min-h-screen p-4">
-      <h1 className="text-3xl text-center font-semibold mb-6 text-color-title">2-Minute Habits</h1>
+      <h1 className="text-title-lg mb-6 text-color-title text-center">2-Minute Habits</h1>
       {habits.length === 0 && (
         <SetupModal
           suggestions={SUGGESTIONS}
