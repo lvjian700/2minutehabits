@@ -11,7 +11,26 @@
   }
 }
 
-/* Add any global styles or Tailwind imports here */
+/* Safari-specific improvements */
+@supports (-webkit-touch-callout: none) {
+  /* Safari-specific styles */
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Improve scrolling behavior */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Fix font rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for transparent status bar */
+    padding-top: env(safe-area-inset-top);
+  }
+}
 
 @keyframes shake {
   0% { transform: translateX(0); }
