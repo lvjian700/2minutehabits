@@ -97,7 +97,7 @@ const App: React.FC = () => {
           </div>
           {/* Right panel: calendar view */}
           {selectedHabitId !== null && (
-            <div className="transition-all duration-500 w-full bg-[#FCF7EE] rounded-xl shadow-md p-4 mt-4 sm:mt-0 sm:ml-6">
+            <div className="transition-all duration-500 w-full bg-white rounded-xl shadow-md p-4 mt-4 sm:mt-0 sm:ml-6">
               <CalendarView
                 habit={habits.find(h => h.id === selectedHabitId)!}
                 onToggle={date =>
