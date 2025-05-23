@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Habit } from '../types/Habit';
+import { getLocalDateString } from '../utils/date';
 
 interface CalendarViewProps {
   habit: Habit;
@@ -13,7 +14,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
   const month = currentDate.getMonth();
   const startDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getLocalDateString();
 
   const generateCalendar = () => {
     const cells: JSX.Element[] = [];

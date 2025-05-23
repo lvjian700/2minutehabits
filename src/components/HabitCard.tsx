@@ -1,4 +1,9 @@
 import React from 'react';
+import { GripVertical } from 'lucide-react';
+import classNames from 'classnames';
+import { Habit } from '../types/Habit';
+import { getLocalDateString } from '../utils/date';
+
 // Fallback Card, CardContent, Button, Badge implementations
 const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => (
   <div className={classNames('rounded-2xl shadow-md bg-white relative overflow-hidden border border-gray-200 group transition-all', className)} {...props}>{children}</div>
@@ -14,9 +19,6 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant
 const Badge: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({ className, children, ...props }) => (
   <span className={classNames('px-2 py-0.5 rounded-full text-xs font-semibold', className)} {...props}>{children}</span>
 );
-import { GripVertical } from 'lucide-react';
-import classNames from 'classnames';
-import { Habit } from '../App';
 
 interface DragHandleProps {
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
@@ -49,7 +51,7 @@ const priorityColors = [
 
 const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order, dragHandleProps }) => {
   // Compute completion status for today directly from logs
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getLocalDateString();
   const completedToday = habit.logs && habit.logs[todayStr];
   const status = completedToday ? 'complete' : 'incomplete';
   const emoji = (habit as any).emoji ?? (habit as any).icon ?? '🏆';
@@ -74,9 +76,9 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
           </div>
         )}
         <div className="text-5xl mb-2">{emoji}</div>
-        <h2 className="text-subtitle text-color-title mb-2 text-center">{habit.name}</h2>
-        <div className="text-color-text mb-4">
-          <p className="text-body"><span className="font-medium">Completed Days:</span> {completedDays}</p>
+        <h2 className="text-xl font-semibold text-color-title mb-2 text-center">{habit.name}</h2>
+        <div className="text-gray-600 text- mb-4">
+          <p><span className="font-medium">Completed Days:</span> {completedDays}</p>
         </div>
         {status === 'complete' ? (
           <Button variant="secondary" disabled>Completed</Button>

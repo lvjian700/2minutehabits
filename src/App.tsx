@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Habit } from './types/Habit';
+import { getLocalDateString } from './utils/date';
 import HabitsDndGrid from './components/HabitsDndGrid';
 import useLocalStorage from './hooks/useLocalStorage';
 import SetupModal from './components/SetupModal';
@@ -77,7 +78,7 @@ const App: React.FC = () => {
                 onToggle={(habitId) =>
                   toggleLog(
                     habitId,
-                    new Date().toISOString().split('T')[0]
+                    getLocalDateString()
                   )
                 }
                 onSelect={setSelectedHabitId}
