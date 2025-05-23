@@ -67,7 +67,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
           </div>
         )}
         <div className="text-5xl mb-2">{emoji}</div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2 text-center">{habit.name}</h2>
+        <h2 className="text-xl font-semibold text-[#1E3A5F] mb-2 text-center">{habit.name}</h2>
         <div className="text-gray-600 text- mb-4">
           <p><span className="font-medium">Completed Days:</span> {completedDays}</p>
         </div>
