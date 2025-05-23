@@ -59,10 +59,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
 
   return (
     <Card
-      className={classNames(
-        'rounded-2xl shadow-md bg-white relative overflow-hidden border border-gray-200 group transition-all',
-        habit.name === 'Meditation' && 'hover:ring-2 hover:ring-yellow-300'
-      )}
+      className="rounded-2xl shadow-md bg-white relative overflow-hidden border border-gray-200 group transition-all hover:ring-2 hover:ring-yellow-300"
       onClick={onSelect}
       role="button"
       tabIndex={0}
