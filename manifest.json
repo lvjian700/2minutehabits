@@ -1,0 +1,21 @@
+{
+  "short_name": "2-Min Habits",
+  "name": "2-Minute Habits",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#FCF7EE",
+  "theme_color": "#FCF7EE",
+  "orientation": "portrait"
+}
