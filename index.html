@@ -2,14 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/ihahits/assets/icon-192-463b6929.png" />
+    <link rel="apple-touch-icon" href="/ihahits/assets/icon-192-463b6929.png" />
+    <link rel="manifest" href="data:application/json;base64,ewogICJzaG9ydF9uYW1lIjogIjItTWluIEhhYml0cyIsCiAgIm5hbWUiOiAiMi1NaW51dGUgSGFiaXRzIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaWNvbi0xOTIucG5nIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiCiAgICB9LAogICAgewogICAgICAic3JjIjogImljb24tNTEyLnBuZyIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIgogICAgfQogIF0sCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjRkNGN0VFIiwKICAidGhlbWVfY29sb3IiOiAiI0ZDRjdFRSIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0Igp9Cg==" />
+    <meta name="theme-color" content="#FCF7EE" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Habit Tracker</title>
-    <script type="module" crossorigin src="/ihahits/assets/index-d75c8902.js"></script>
-    <link rel="stylesheet" href="/ihahits/assets/index-00a72a0b.css">
+    <title>2-Minute Habits</title>
+    <script type="module" crossorigin src="/ihahits/assets/index-04ba193b.js"></script>
+    <link rel="stylesheet" href="/ihahits/assets/index-3f7fdb67.css">
   </head>
   <body>
     <div id="root"></div>
     
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js');
+        });
+      }
+    </script>
   </body>
 </html>
