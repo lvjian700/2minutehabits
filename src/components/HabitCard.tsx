@@ -18,6 +18,20 @@ import { GripVertical } from 'lucide-react';
 import classNames from 'classnames';
 import { Habit } from '../App';
 
+interface DragHandleProps {
+  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
+}
+
+const DragHandle: React.FC<DragHandleProps> = ({ dragHandleProps }) => {
+  if (!dragHandleProps) return null;
+  
+  return (
+    <div className="absolute top-2 right-2 opacity-100 opacity-0 group-hover:opacity-100 transition-opacity" {...dragHandleProps}>
+      <GripVertical className="h-5 w-5 text-gray-400 cursor-grab" />
+    </div>
+  );
+};
+
 interface HabitCardProps {
   habit: Habit;
   onToggle: () => void;
@@ -54,12 +68,8 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
       tabIndex={0}
     >
       <CardContent className="p-6 flex flex-col items-center">
-        {/* Drag handle (for DnD grid, always visible on mobile, hover on desktop) */}
-        {dragHandleProps && (
-          <div className="absolute top-2 right-2 opacity-100 opacity-0 group-hover:opacity-100 transition-opacity" {...dragHandleProps}>
-            <GripVertical className="h-5 w-5 text-gray-400 cursor-grab" />
-          </div>
-        )}
+        {/* Drag handle component */}
+        <DragHandle dragHandleProps={dragHandleProps} />
         {/* Order badge */}
         {typeof order === 'number' && (
           <div className="absolute top-2 left-2">
