@@ -21,10 +21,18 @@ const DevMenu: React.FC<DevMenuProps> = ({ habits, setHabits, setSelectedHabitId
     }
   };
   
+  // Current app version
+  const APP_VERSION = '0.0.1';
+  
   // Export data as JSON file
   const handleExportData = () => {
     try {
-      const data = JSON.stringify(habits, null, 2);
+      // Include version number with the data
+      const exportData = {
+        version: APP_VERSION,
+        habits: habits
+      };
+      const data = JSON.stringify(exportData, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -54,14 +62,24 @@ const DevMenu: React.FC<DevMenuProps> = ({ habits, setHabits, setSelectedHabitId
         try {
           const importedData = JSON.parse(event.target?.result as string);
           
-          // Validate imported data
-          if (!Array.isArray(importedData)) {
+          // Handle both versioned and legacy data formats
+          let habitsData;
+          
+          if (importedData.version && Array.isArray(importedData.habits)) {
+            // New format with version
+            habitsData = importedData.habits;
+            console.log(`Importing data from version ${importedData.version}`);
+          } else if (Array.isArray(importedData)) {
+            // Legacy format (just an array)
+            habitsData = importedData;
+            console.log('Importing legacy data format');
+          } else {
             throw new Error('Invalid data format');
           }
           
           // Confirm before overwriting
           if (confirm('Import this data? This will replace your current habits.')) {
-            setHabits(importedData);
+            setHabits(habitsData);
             setSelectedHabitId(null);
             setIsOpen(false);
           }
