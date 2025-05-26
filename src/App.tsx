@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Habit } from './types/Habit';
 import { getLocalDateString } from './utils/date';
 import HabitsDndGrid from './components/HabitsDndGrid';
@@ -7,6 +7,7 @@ import SetupModal from './components/SetupModal';
 import HabitSummary from './components/HabitSummary';
 import CalendarView from './components/CalendarView';
 import DevMenu from './components/DevMenu';
+import { useVisibilityRefresh } from './hooks/useDateRefresh';
 
 // Predefined habit suggestions for onboarding (single-emoji icons)
 const SUGGESTIONS = [
@@ -23,6 +24,9 @@ const SUGGESTIONS = [
 const App: React.FC = () => {
   const [habits, setHabits] = useLocalStorage<Habit[]>('habitTrackerData', []);
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
+  
+  // Use the visibility refresh hook to handle date changes when tab becomes active
+  useVisibilityRefresh();
 
   const saveHabits = (newHabits: Omit<Habit, 'logs'>[]) => {
     const formatted = newHabits.map(h => ({ ...h, logs: {} }));
