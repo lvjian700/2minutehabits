@@ -20,7 +20,9 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js');
+          // Use the correct base path when deployed to GitHub Pages
+          const basePath = location.hostname === 'localhost' ? '' : '/ihahits';
+          navigator.serviceWorker.register(`${basePath}/service-worker.js`);
         });
       }
     </script>

@@ -1,11 +1,17 @@
 // Simple service worker for PWA
-const CACHE_NAME = 'ivotes-cache-v1';
+const CACHE_NAME = 'ivotes-cache-v2';
+
+// Determine the base path based on where the service worker is located
+const scope = self.registration.scope;
+const isGitHubPages = scope.includes('github.io');
+const BASE_PATH = isGitHubPages ? '/ihahits' : '';
+
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
+  `${BASE_PATH}/`,
+  `${BASE_PATH}/index.html`,
+  `${BASE_PATH}/manifest.json`,
+  `${BASE_PATH}/icon-192.png`,
+  `${BASE_PATH}/icon-512.png`,
   // Add more assets or routes as needed
 ];
 
