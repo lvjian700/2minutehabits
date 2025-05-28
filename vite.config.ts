@@ -3,35 +3,26 @@ import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
 
-// Custom plugin to copy PWA files to build directory
-function copyPwaFiles() {
+// Custom plugin to copy service worker file to build directory
+function copyServiceWorker() {
   return {
-    name: 'copy-pwa-files',
+    name: 'copy-service-worker',
     closeBundle() {
-      const filesToCopy = [
-        'service-worker.js',
-        'manifest.json',
-        'icon-192.png',
-        'icon-512.png'
-      ];
+      const srcPath = path.resolve(__dirname, 'service-worker.js');
+      const destPath = path.resolve(__dirname, 'dist', 'service-worker.js');
       
-      filesToCopy.forEach(file => {
-        const srcPath = path.resolve(__dirname, file);
-        const destPath = path.resolve(__dirname, 'dist', file);
-        
-        if (fs.existsSync(srcPath)) {
-          // Create directory if it doesn't exist
-          const dir = path.dirname(destPath);
-          if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-          }
-          
-          fs.copyFileSync(srcPath, destPath);
-          console.log(`Copied ${file} to build directory`);
-        } else {
-          console.error(`File not found at: ${srcPath}`);
+      if (fs.existsSync(srcPath)) {
+        // Create directory if it doesn't exist
+        const dir = path.dirname(destPath);
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
         }
-      });
+        
+        fs.copyFileSync(srcPath, destPath);
+        console.log('Service worker copied to build directory');
+      } else {
+        console.error('Service worker file not found at:', srcPath);
+      }
     }
   };
 }
@@ -39,5 +30,5 @@ function copyPwaFiles() {
 export default defineConfig({
   // Base public path when served from GitHub Pages under /ihahits/
   base: '/ihahits/',
-  plugins: [react(), copyPwaFiles()]
+  plugins: [react(), copyServiceWorker()]
 });
