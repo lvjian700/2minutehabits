@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Habit } from '../types/Habit';
+import Modal from './Modal';
 
 interface Suggestion {
   name: string;
@@ -66,8 +67,8 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
+    <Modal isOpen={true} onClose={() => {}}>
+      <div className="p-6">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
           Choose up to {maxSelectable} Habits
         </h2>
@@ -123,7 +124,7 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 
