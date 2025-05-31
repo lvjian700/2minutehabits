@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import type { Habit } from '../types/Habit';
 import { getLocalDateString } from '../utils/date';
 import { MoreHorizontal, X } from 'lucide-react';
@@ -9,10 +10,71 @@ interface HabitDetailsViewProps {
   onClose: () => void;
 }
 
+// Dropdown Menu Component
+const DropdownMenu: React.FC<{
+  buttonRef: React.RefObject<HTMLButtonElement>;
+  isOpen: boolean;
+  onClose: () => void;
+  onCloseModal: () => void;
+}> = ({ buttonRef, isOpen, onClose, onCloseModal }) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX
+      });
+    }
+  }, [isOpen, buttonRef]);
+  
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node) && 
+          buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+    
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose, buttonRef]);
+  
+  if (!isOpen) return null;
+  
+  return ReactDOM.createPortal(
+    <div 
+      ref={menuRef}
+      className="fixed py-1 w-36 bg-white rounded-md shadow-lg z-50 border-l border-b border-gray-200"
+      style={{ top: `${position.top}px`, left: `${position.left}px` }}
+    >
+      <button 
+        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+        onClick={() => {
+          onClose();
+          onCloseModal();
+        }}
+      >
+        <X size={16} className="mr-2" />
+        Close
+      </button>
+      {/* Add more menu items here in the future */}
+    </div>,
+    document.body
+  );
+};
+
 const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, onClose }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -23,20 +85,6 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
   // Compute completed days from logs
   const completedDays = habit.logs ? Object.values(habit.logs).filter(Boolean).length : 0;
   const emoji = (habit as any).emoji ?? (habit as any).icon ?? '🏆';
-  
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const generateCalendar = () => {
     const cells: JSX.Element[] = [];
@@ -85,8 +133,9 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
             <p className="text-gray-600">Completed {completedDays} {completedDays === 1 ? 'day' : 'days'}</p>
           </div>
         </div>
-        <div className="relative" ref={menuRef}>
+        <div>
           <button 
+            ref={buttonRef}
             onClick={() => setMenuOpen(!menuOpen)}
             className="p-1.5 rounded-md hover:bg-gray-100 transition-colors"
             aria-label="Menu"
@@ -94,21 +143,12 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
             <MoreHorizontal size={20} className="text-gray-500" />
           </button>
           
-          {menuOpen && (
-            <div className="absolute right-0 mt-1 py-1 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
-              <button 
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                onClick={() => {
-                  setMenuOpen(false);
-                  onClose();
-                }}
-              >
-                <X size={16} className="mr-2" />
-                Close
-              </button>
-              {/* Add more menu items here in the future */}
-            </div>
-          )}
+          <DropdownMenu 
+            buttonRef={buttonRef}
+            isOpen={menuOpen}
+            onClose={() => setMenuOpen(false)}
+            onCloseModal={onClose}
+          />
         </div>
       </div>
 
