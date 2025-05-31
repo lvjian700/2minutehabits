@@ -1,10 +1,14 @@
 // Simple service worker for PWA
-const CACHE_NAME = 'ivotes-cache-v2';
+const CACHE_NAME = 'ivotes-cache-v3';
 
 // Determine the base path based on where the service worker is located
 const scope = self.registration.scope;
 const isGitHubPages = scope.includes('github.io');
 const BASE_PATH = isGitHubPages ? '/ihahits' : '';
+
+// For debugging
+console.log('Service Worker scope:', scope);
+console.log('Using BASE_PATH:', BASE_PATH);
 
 const urlsToCache = [
   `${BASE_PATH}/`,
@@ -32,7 +36,23 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
-  );
+  // Skip cross-origin requests
+  if (event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(cache => {
+        return fetch(event.request)
+          .then(response => {
+            // If we got a valid response, cache it
+            if (response.status === 200) {
+              cache.put(event.request, response.clone());
+            }
+            return response;
+          })
+          .catch(() => {
+            // If network request fails, try to serve from cache
+            return caches.match(event.request);
+          });
+      })
+    );
+  }
 });
