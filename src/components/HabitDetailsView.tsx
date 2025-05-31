@@ -89,7 +89,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
   const generateCalendar = () => {
     const cells: JSX.Element[] = [];
     ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
-      cells.push(<div key={day} className="text-center text-medium text-gray-500">{day}</div>);
+      cells.push(<div key={day} className="text-center font-medium text-gray-500 py-2">{day}</div>);
     });
     for (let i = 0; i < startDay; i++) {
       cells.push(<div key={'empty-' + i} />);
@@ -107,7 +107,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
         <div
           key={dateStr}
           onClick={isFutureDate ? undefined : () => onToggle(dateStr)}
-          className={`p-2 text-center rounded transition-colors text-sm 
+          className={`p-3 text-center rounded transition-colors text-base h-14 flex items-center justify-center
             ${completed ? 'bg-green-500 text-white' : ''}
             ${isToday ? 'border-2 border-blue-500' : ''}
             ${isFutureDate 
@@ -173,7 +173,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
       
       {/* Calendar grid */}
       <div className="overflow-x-auto">
-        <div className="min-w-[280px] grid grid-cols-7 gap-1 gap-2 text-xs">
+        <div className="min-w-[280px] grid grid-cols-7 gap-3 text-sm my-4">
           {generateCalendar()}
         </div>
       </div>
