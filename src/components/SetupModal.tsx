@@ -1,6 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { Habit } from '../types/Habit';
-import Modal from './Modal';
+
+// Custom modal wrapper with appropriate width for setup
+const SetupModalWrapper: React.FC<{children: React.ReactNode}> = ({ children }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+  
+  // Handle click outside to close (not used but kept for future functionality)
+  const handleOutsideClick = (e: React.MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      // No-op for now, since we don't want to close the setup modal
+    }
+  };
+
+  return (
+    <div 
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 p-4 bg-black bg-opacity-50 transition-opacity"
+      onClick={handleOutsideClick}
+    >
+      <div 
+        ref={modalRef}
+        className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-auto transform transition-all"
+        onClick={e => e.stopPropagation()}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
 
 interface Suggestion {
   name: string;
@@ -67,7 +93,7 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
   };
 
   return (
-    <Modal isOpen={true} onClose={() => {}}>
+    <SetupModalWrapper>
       <div className="p-6">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
           Choose up to {maxSelectable} Habits
@@ -124,7 +150,7 @@ const SetupModal: React.FC<SetupModalProps> = ({ suggestions, maxSelectable, def
           </button>
         </div>
       </div>
-    </Modal>
+    </SetupModalWrapper>
   );
 };
 

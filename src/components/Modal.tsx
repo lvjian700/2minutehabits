@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     >
       <div 
         ref={modalRef}
-        className="bg-white rounded-xl shadow-xl w-full max-w-xl max-h-[90vh] overflow-auto transform transition-all"
+        className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-auto transform transition-all"
         onClick={e => e.stopPropagation()}
       >
         {children}
