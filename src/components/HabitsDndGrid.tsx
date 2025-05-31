@@ -3,7 +3,7 @@ import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from 
 import { arrayMove, SortableContext, useSortable, rectSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import HabitCard from './HabitCard';
-import { Habit } from '../App';
+import type { Habit } from '../types/Habit';
 
 interface HabitsDndGridProps {
   habits: Habit[];
