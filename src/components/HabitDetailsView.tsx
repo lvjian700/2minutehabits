@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { Habit } from '../types/Habit';
 import { getLocalDateString } from '../utils/date';
-import { X } from 'lucide-react';
+import { MoreHorizontal, X } from 'lucide-react';
 
 interface HabitDetailsViewProps {
   habit: Habit;
@@ -11,6 +11,9 @@ interface HabitDetailsViewProps {
 
 const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, onClose }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const startDay = new Date(year, month, 1).getDay();
@@ -20,6 +23,20 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
   // Compute completed days from logs
   const completedDays = habit.logs ? Object.values(habit.logs).filter(Boolean).length : 0;
   const emoji = (habit as any).emoji ?? (habit as any).icon ?? '🏆';
+  
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const generateCalendar = () => {
     const cells: JSX.Element[] = [];
@@ -68,12 +85,31 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
             <p className="text-gray-600">Completed {completedDays} {completedDays === 1 ? 'day' : 'days'}</p>
           </div>
         </div>
-        <button 
-          onClick={onClose}
-          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-        >
-          <X size={24} className="text-gray-500" />
-        </button>
+        <div className="relative" ref={menuRef}>
+          <button 
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-1.5 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Menu"
+          >
+            <MoreHorizontal size={20} className="text-gray-500" />
+          </button>
+          
+          {menuOpen && (
+            <div className="absolute right-0 mt-1 py-1 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+              <button 
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                onClick={() => {
+                  setMenuOpen(false);
+                  onClose();
+                }}
+              >
+                <X size={16} className="mr-2" />
+                Close
+              </button>
+              {/* Add more menu items here in the future */}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Month navigation */}
