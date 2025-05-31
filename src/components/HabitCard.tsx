@@ -59,10 +59,16 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
   // Compute completed days from logs
   const completedDays = habit.logs ? Object.values(habit.logs).filter(Boolean).length : 0;
 
+  // Handle card click to open details modal
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onSelect();
+  };
+
   return (
     <Card
       className="rounded-2xl shadow-md bg-white relative overflow-hidden border border-gray-200 group transition-all hover:ring-2 hover:ring-yellow-300"
-      onClick={onSelect}
+      onClick={handleCardClick}
       role="button"
       tabIndex={0}
     >

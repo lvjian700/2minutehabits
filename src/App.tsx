@@ -4,8 +4,8 @@ import { getLocalDateString } from './utils/date';
 import HabitsDndGrid from './components/HabitsDndGrid';
 import useLocalStorage from './hooks/useLocalStorage';
 import SetupModal from './components/SetupModal';
-import HabitSummary from './components/HabitSummary';
-import CalendarView from './components/CalendarView';
+import HabitDetailsView from './components/HabitDetailsView';
+import Modal from './components/Modal';
 import DevMenu from './components/DevMenu';
 import { useVisibilityRefresh } from './hooks/useDateRefresh';
 
@@ -60,50 +60,35 @@ const App: React.FC = () => {
         />
       )}
       {habits.length > 0 && (
-        <div className="relative max-w-4xl mx-auto flex flex-col sm:flex-row transition-all duration-500">
-          {/* Left panel: grid view or summary list on calendar open */}
-          <div
-            className={`transition-all duration-500 ${
-              selectedHabitId ? 'w-full sm:w-1/4' : 'w-full'
-            }`}
+        <div className="relative max-w-4xl mx-auto">
+          {/* Grid view of habits */}
+          <HabitsDndGrid
+            habits={habits}
+            onReorder={setHabits}
+            onToggle={(habitId) =>
+              toggleLog(
+                habitId,
+                getLocalDateString()
+              )
+            }
+            onSelect={setSelectedHabitId}
+          />
+          
+          {/* Modal with habit details */}
+          <Modal 
+            isOpen={selectedHabitId !== null} 
+            onClose={() => setSelectedHabitId(null)}
           >
-            {selectedHabitId === null ? (
-              <HabitsDndGrid
-                habits={habits}
-                onReorder={setHabits}
-                onToggle={(habitId) =>
-                  toggleLog(
-                    habitId,
-                    getLocalDateString()
-                  )
-                }
-                onSelect={setSelectedHabitId}
-              />
-            ) : (
-              <div className="flex flex-col gap-2 font-medium">
-                {habits.map(habit => (
-                  <HabitSummary
-                    key={habit.id}
-                    habit={habit}
-                    isActive={habit.id === selectedHabitId}
-                    onSelect={() => setSelectedHabitId(habit.id)}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-          {/* Right panel: calendar view */}
-          {selectedHabitId !== null && (
-            <div className="transition-all duration-500 w-full bg-white rounded-xl shadow-md p-4 mt-4 sm:mt-0 sm:ml-6">
-              <CalendarView
+            {selectedHabitId !== null && (
+              <HabitDetailsView
                 habit={habits.find(h => h.id === selectedHabitId)!}
                 onToggle={date =>
                   toggleLog(selectedHabitId, date)
                 }
                 onClose={() => setSelectedHabitId(null)}
               />
-            </div>
-          )}
+            )}
+          </Modal>
         </div>
       )}
       </div>
