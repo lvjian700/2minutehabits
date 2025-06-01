@@ -49,7 +49,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
   const generateCalendar = () => {
     const cells: JSX.Element[] = [];
     ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
-      cells.push(<div key={day} className="text-center text-medium text-gray-500">{day}</div>);
+      cells.push(<div key={day} className="text-center font-medium text-gray-500 py-2">{day}</div>);
     });
     for (let i = 0; i < startDay; i++) {
       cells.push(<div key={'empty-' + i} />);
@@ -67,7 +67,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
         <div
           key={dateStr}
           onClick={isFutureDate ? undefined : () => onToggle(dateStr)}
-          className={`p-2 text-center rounded transition-colors text-sm 
+          className={`p-2 text-center rounded transition-colors text-sm h-12 flex items-center justify-center
             ${completed ? 'bg-green-500 text-white' : ''}
             ${isToday ? 'border-2 border-blue-500' : ''}
             ${isFutureDate 
@@ -83,10 +83,10 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
   };
 
   return (
-    <div>
+    <div className="py-2">
       {/* Month navigation */}
       <div 
-        className="flex justify-between items-center mb-4"
+        className="flex justify-between items-center"
         aria-label="Month navigation"
         onMouseEnter={showNavButtons}
         onMouseLeave={hideNavButtons}
@@ -111,17 +111,10 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
       </div>
       {/* Calendar grid: horizontal-scrollable on mobile */}
       <div className="overflow-x-auto">
-        <div className="min-w-[280px] min-w-full grid grid-cols-7 gap-1 gap-2 text-xs">
+        <div className="min-w-[280px] grid grid-cols-7 gap-3 text-sm my-4">
           {generateCalendar()}
         </div>
       </div>
-      {/* Back to dashboard */}
-      <button
-        className="mt-4 text-gray-600 hover:text-gray-800 text-sm"
-        onClick={onClose}
-      >
-        &larr; Back to Dashboard
-      </button>
     </div>
   );
 };
