@@ -111,7 +111,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose })
       </div>
       {/* Calendar grid: horizontal-scrollable on mobile */}
       <div className="overflow-x-auto">
-        <div className="min-w-[280px] grid grid-cols-7 gap-3 text-sm my-4">
+        <div className="min-w-[280px] grid grid-cols-7 gap-3 text-sm mt-4">
           {generateCalendar()}
         </div>
       </div>
