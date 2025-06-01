@@ -78,6 +78,7 @@ const App: React.FC = () => {
           <Modal 
             isOpen={selectedHabitId !== null} 
             onClose={() => setSelectedHabitId(null)}
+            aria-label="Habit details"
           >
             {selectedHabitId !== null && (
               <HabitDetailsView
