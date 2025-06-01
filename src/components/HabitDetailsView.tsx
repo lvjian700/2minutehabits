@@ -94,7 +94,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
   return (
     <div className="p-6">
       {/* Header with habit info and close button */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-2">
         <div className="flex items-center">
           <div className="text-5xl mr-4">{emoji}</div>
           <div>
