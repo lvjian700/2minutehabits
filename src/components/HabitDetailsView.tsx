@@ -6,6 +6,7 @@ import { MoreHorizontal, X } from 'lucide-react';
 import CalendarView from './CalendarView';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
+import EditableText from './EditableText';
 
 interface HabitDetailsViewProps {
   habit: Habit;
@@ -91,8 +92,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
   const [menuOpen, setMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [editingIcon, setEditingIcon] = useState(false);
-  const [editingName, setEditingName] = useState(false);
-  const [tempName, setTempName] = useState(habit.name);
+  // editingName and tempName state removed, handled by EditableText
   const [tempIcon, setTempIcon] = useState(habit.icon || '🏆');
 
   // Refs and state for emoji picker popover
@@ -111,12 +111,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
     if (onEditHabit) onEditHabit(habit.id, { icon: emojiData.native });
   };
 
-  const handleNameSave = () => {
-    setEditingName(false);
-    if (onEditHabit && tempName.trim() && tempName !== habit.name) {
-      onEditHabit(habit.id, { name: tempName.trim() });
-    }
-  };
+  // handleNameSave function removed, logic moved to EditableText and its onSave prop
 
   // Effect for positioning the emoji picker
   useEffect(() => {
@@ -161,20 +156,18 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
         <div className="flex items-center">
           <div ref={emojiIconRef} className="text-5xl mr-4 cursor-pointer" onClick={() => setEditingIcon(prev => !prev)}>{emoji}</div>
           <div>
-            {editingName ? (
-              <div className="flex items-center">
-                <input
-                  className="text-2xl font-bold border rounded px-2 py-1 mr-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                  value={tempName}
-                  onChange={e => setTempName(e.target.value)}
-                  onBlur={handleNameSave}
-                  onKeyDown={e => { if (e.key === 'Enter') handleNameSave(); }}
-                  autoFocus
-                />
-              </div>
-            ) : (
-              <h2 className="text-2xl font-bold text-gray-800 cursor-pointer" onClick={() => setEditingName(true)}>{tempName}</h2>
-            )}
+            <EditableText
+              initialValue={habit.name}
+              onSave={(newName) => {
+                if (onEditHabit) {
+                  onEditHabit(habit.id, { name: newName });
+                }
+              }}
+              textElement="h2"
+              textClassName="text-2xl font-bold text-gray-800 cursor-pointer"
+              inputClassName="text-2xl font-bold border rounded px-2 py-1 mr-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              ariaLabel={`habit name ${habit.name}`}
+            />
             <p className="text-gray-600">Completed {completedDays} {completedDays === 1 ? 'day' : 'days'}</p>
           </div>
         </div>
