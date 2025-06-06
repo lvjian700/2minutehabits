@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import type { Habit } from '../types/Habit';
 import { getLocalDateString } from '../utils/date';
 import { MoreHorizontal, X } from 'lucide-react';
 import CalendarView from './CalendarView';
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 
 interface HabitDetailsViewProps {
   habit: Habit;
@@ -12,20 +14,14 @@ interface HabitDetailsViewProps {
   onEditHabit?: (habitId: number, updates: Partial<Habit>) => void;
 }
 
-// Simple Emoji Picker
-const EMOJIS = [
-  '🏋️', '🏃', '🧘', '✍️', '🌙', '📖', '🍭', '🚭', '✅', '💪', '🔥', '🥗', '🛏️', '🧑‍💻', '🎨', '🧹', '🎸', '🚴', '🚶', '🧊', '🥤', '🍎', '🍀', '🌳', '🌞', '🌊', '🌻'
-];
-
 // Dropdown Menu Component
 const DropdownMenu: React.FC<{
   buttonRef: React.RefObject<HTMLButtonElement>;
   isOpen: boolean;
   onClose: () => void;
   onCloseModal: () => void;
-  onEditIcon: () => void;
-  onEditName: () => void;
-}> = ({ buttonRef, isOpen, onClose, onCloseModal, onEditIcon, onEditName }) => {
+  // onEditIcon and onEditName removed as they are no longer used
+}> = ({ buttonRef, isOpen, onClose, onCloseModal }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isVisible, setIsVisible] = useState(false);
@@ -75,26 +71,7 @@ const DropdownMenu: React.FC<{
         pointerEvents: isVisible ? 'auto' : 'none'
       }}
     >
-      <button 
-        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-        onClick={() => {
-          onClose();
-          onEditIcon();
-        }}
-      >
-        <span role="img" aria-label="Change Icon" className="mr-2">😀</span>
-        Change Icon
-      </button>
-      <button 
-        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-        onClick={() => {
-          onClose();
-          onEditName();
-        }}
-      >
-        <span className="mr-2">✏️</span>
-        Edit Name
-      </button>
+
       <button 
         className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
         onClick={() => {
@@ -122,10 +99,10 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
   const completedDays = habit.logs ? Object.values(habit.logs).filter(Boolean).length : 0;
   const emoji = tempIcon;
 
-  const handleSelectEmoji = (e: string) => {
-    setTempIcon(e);
+  const handleSelectEmoji = (emojiData: any) => {
+    setTempIcon(emojiData.native);
     setEditingIcon(false);
-    if (onEditHabit) onEditHabit(habit.id, { icon: e });
+    if (onEditHabit) onEditHabit(habit.id, { icon: emojiData.native });
   };
 
   const handleNameSave = () => {
@@ -152,7 +129,6 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
                   onKeyDown={e => { if (e.key === 'Enter') handleNameSave(); }}
                   autoFocus
                 />
-                <button className="text-sm px-2 py-1 bg-blue-500 text-white rounded" onClick={handleNameSave}>Save</button>
               </div>
             ) : (
               <h2 className="text-2xl font-bold text-gray-800 cursor-pointer" onClick={() => setEditingName(true)}>{tempName}</h2>
@@ -174,29 +150,28 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
             isOpen={menuOpen}
             onClose={() => setMenuOpen(false)}
             onCloseModal={onClose}
-            onEditIcon={() => setEditingIcon(true)}
-            onEditName={() => setEditingName(true)}
+            // onEditIcon and onEditName props removed
           />
         </div>
       </div>
 
-      {/* Emoji Picker Modal */}
+      {/* Emoji Mart Picker Modal */}
       {editingIcon && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <div className="mb-2 font-bold">Pick an emoji</div>
-            <div className="grid grid-cols-8 gap-2 max-w-xs">
-              {EMOJIS.map(e => (
-                <button
-                  key={e}
-                  className="text-2xl p-1 hover:bg-gray-200 rounded"
-                  onClick={() => handleSelectEmoji(e)}
-                >
-                  {e}
-                </button>
-              ))}
-            </div>
-            <button className="mt-4 px-4 py-2 bg-gray-200 rounded" onClick={() => setEditingIcon(false)}>Cancel</button>
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" onClick={() => setEditingIcon(false)}>
+          {/* Prevent modal close when clicking inside picker */}
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <Picker 
+              data={data} 
+              onEmojiSelect={handleSelectEmoji} 
+              theme="light" // or "dark"
+              // Optional: Customize categories, emojis per line, size, etc.
+              // categories={['people', 'nature', 'foods', 'activity', 'places', 'objects', 'symbols', 'flags']}
+              // perLine={9}
+              // emojiSize={24}
+              // showPreview={false}
+              // showSkinTones={true}
+              // previewPosition="none"
+            />
           </div>
         </div>
       )}
