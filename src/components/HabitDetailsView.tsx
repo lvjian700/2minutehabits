@@ -95,6 +95,12 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
   const [tempName, setTempName] = useState(habit.name);
   const [tempIcon, setTempIcon] = useState(habit.icon || '🏆');
 
+  // Refs and state for emoji picker popover
+  const emojiIconRef = useRef<HTMLDivElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const [emojiPickerPosition, setEmojiPickerPosition] = useState({ top: 0, left: 0 });
+  const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
+
   // Compute completed days from logs
   const completedDays = habit.logs ? Object.values(habit.logs).filter(Boolean).length : 0;
   const emoji = tempIcon;
@@ -112,17 +118,53 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
     }
   };
 
+  // Effect for positioning the emoji picker
+  useEffect(() => {
+    if (editingIcon && emojiIconRef.current) {
+      const rect = emojiIconRef.current.getBoundingClientRect();
+      setEmojiPickerPosition({
+        top: rect.bottom + window.scrollY + 8, // 8px spacing below the icon
+        left: rect.left + window.scrollX,
+      });
+      setTimeout(() => setEmojiPickerVisible(true), 0); // For smooth opacity transition
+    } else {
+      setEmojiPickerVisible(false);
+    }
+  }, [editingIcon]);
+
+  // Effect for handling click outside the emoji picker
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node) &&
+        emojiIconRef.current &&
+        !emojiIconRef.current.contains(event.target as Node)
+      ) {
+        setEditingIcon(false);
+      }
+    };
+
+    if (editingIcon && emojiPickerVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [editingIcon, emojiPickerVisible]);
+
   return (
     <div className="p-6">
       {/* Header with habit info and close button */}
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-center">
-          <div className="text-5xl mr-4 cursor-pointer" onClick={() => setEditingIcon(true)}>{emoji}</div>
+          <div ref={emojiIconRef} className="text-5xl mr-4 cursor-pointer" onClick={() => setEditingIcon(prev => !prev)}>{emoji}</div>
           <div>
             {editingName ? (
               <div className="flex items-center">
                 <input
-                  className="text-2xl font-bold border rounded px-2 py-1 mr-2"
+                  className="text-2xl font-bold border rounded px-2 py-1 mr-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                   value={tempName}
                   onChange={e => setTempName(e.target.value)}
                   onBlur={handleNameSave}
@@ -155,25 +197,29 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
         </div>
       </div>
 
-      {/* Emoji Mart Picker Modal */}
-      {editingIcon && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" onClick={() => setEditingIcon(false)}>
-          {/* Prevent modal close when clicking inside picker */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <Picker 
-              data={data} 
-              onEmojiSelect={handleSelectEmoji} 
-              theme="light" // or "dark"
-              // Optional: Customize categories, emojis per line, size, etc.
-              // categories={['people', 'nature', 'foods', 'activity', 'places', 'objects', 'symbols', 'flags']}
-              // perLine={9}
-              // emojiSize={24}
-              // showPreview={false}
-              // showSkinTones={true}
-              // previewPosition="none"
-            />
-          </div>
-        </div>
+      {/* Emoji Mart Picker Popover */}
+      {editingIcon && ReactDOM.createPortal(
+        <div
+          ref={emojiPickerRef}
+          className="fixed bg-white rounded-lg shadow-xl z-50 border border-gray-200 transition-opacity duration-150"
+          style={{
+            top: `${emojiPickerPosition.top}px`,
+            left: `${emojiPickerPosition.left}px`,
+            opacity: emojiPickerVisible ? 1 : 0,
+            pointerEvents: emojiPickerVisible ? 'auto' : 'none',
+          }}
+        >
+          <Picker 
+            data={data} 
+            onEmojiSelect={handleSelectEmoji} 
+            theme="light"
+            // Consider adding a max-width or width to the Picker if needed
+            // previewPosition="none" // Hides the preview bar if desired
+            // perLine={8} // Adjust number of emojis per line
+            // emojiSize={28} // Adjust emoji size
+          />
+        </div>,
+        document.body
       )}
 
       {/* Calendar Component */}
