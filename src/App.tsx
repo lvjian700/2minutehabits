@@ -33,6 +33,14 @@ const App: React.FC = () => {
     setHabits(formatted);
   };
 
+  const updateHabit = (habitId: number, updates: Partial<Habit>) => {
+    setHabits(prevHabits =>
+      prevHabits.map(habit =>
+        habit.id === habitId ? { ...habit, ...updates } : habit
+      )
+    );
+  };
+
   const toggleLog = (habitId: number, dateStr: string) => {
     setHabits(prev =>
       prev.map(h => {
@@ -87,6 +95,7 @@ const App: React.FC = () => {
                   toggleLog(selectedHabitId, date)
                 }
                 onClose={() => setSelectedHabitId(null)}
+                onEditHabit={updateHabit}
               />
             )}
           </Modal>
