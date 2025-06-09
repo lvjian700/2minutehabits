@@ -67,7 +67,8 @@ const HabitsDndGrid: React.FC<HabitsDndGridProps> = ({ habits, onReorder, onTogg
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={habits.map(h => h.id)} strategy={rectSortingStrategy}>
-        <div className="grid grid-cols-1 grid-cols-2 gap-4">
+        {/* Use a single column layout on small screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {habits.map((habit, idx) => (
             <SortableHabitCard
               key={habit.id}
