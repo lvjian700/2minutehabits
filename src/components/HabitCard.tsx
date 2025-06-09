@@ -83,7 +83,8 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order,
         )}
         <div className="text-5xl mb-2">{emoji}</div>
         <h2 className="text-xl font-semibold text-color-title mb-2 text-center">{habit.name}</h2>
-        <div className="text-gray-600 text- mb-4">
+        {/* Display the number of times the habit has been completed */}
+        <div className="text-gray-600 text-sm mb-4">
           <p><span className="font-medium">Completed Days:</span> {completedDays}</p>
         </div>
         {status === 'complete' ? (
