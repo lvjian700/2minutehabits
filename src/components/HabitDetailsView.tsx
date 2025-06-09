@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import type { Habit } from '../types/Habit';
-import { getLocalDateString } from '../utils/date';
 import { MoreHorizontal, X } from 'lucide-react';
 import CalendarView from './CalendarView';
 import Picker from '@emoji-mart/react';
@@ -21,7 +20,6 @@ const DropdownMenu: React.FC<{
   isOpen: boolean;
   onClose: () => void;
   onCloseModal: () => void;
-  // onEditIcon and onEditName removed as they are no longer used
 }> = ({ buttonRef, isOpen, onClose, onCloseModal }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -92,8 +90,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
   const [menuOpen, setMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [editingIcon, setEditingIcon] = useState(false);
-  // editingName and tempName state removed, handled by EditableText
-  const [tempIcon, setTempIcon] = useState(habit.icon || '🏆');
+  const [habitIcon, setHabitIcon] = useState(habit.icon || '🏆');
 
   // Refs and state for emoji picker popover
   const emojiIconRef = useRef<HTMLDivElement>(null);
@@ -103,15 +100,13 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
 
   // Compute completed days from logs
   const completedDays = habit.logs ? Object.values(habit.logs).filter(Boolean).length : 0;
-  const emoji = tempIcon;
+  const emoji = habitIcon;
 
   const handleSelectEmoji = (emojiData: any) => {
-    setTempIcon(emojiData.native);
+    setHabitIcon(emojiData.native);
     setEditingIcon(false);
     if (onEditHabit) onEditHabit(habit.id, { icon: emojiData.native });
   };
-
-  // handleNameSave function removed, logic moved to EditableText and its onSave prop
 
   // Effect for positioning the emoji picker
   useEffect(() => {
@@ -185,7 +180,6 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
             isOpen={menuOpen}
             onClose={() => setMenuOpen(false)}
             onCloseModal={onClose}
-            // onEditIcon and onEditName props removed
           />
         </div>
       </div>
@@ -206,10 +200,6 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
             data={data} 
             onEmojiSelect={handleSelectEmoji} 
             theme="light"
-            // Consider adding a max-width or width to the Picker if needed
-            // previewPosition="none" // Hides the preview bar if desired
-            // perLine={8} // Adjust number of emojis per line
-            // emojiSize={28} // Adjust emoji size
           />
         </div>,
         document.body
