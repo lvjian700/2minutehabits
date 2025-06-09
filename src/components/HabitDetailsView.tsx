@@ -219,7 +219,6 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, on
       <CalendarView 
         habit={{ ...habit, icon: tempIcon, name: tempName }}
         onToggle={onToggle}
-        onClose={onClose}
       />
     </div>
   );

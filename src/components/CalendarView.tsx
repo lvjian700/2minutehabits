@@ -5,10 +5,9 @@ import { getLocalDateString } from '../utils/date';
 interface CalendarViewProps {
   habit: Habit;
   onToggle: (date: string) => void;
-  onClose: () => void;
 }
 
-const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle, onClose }) => {
+const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [navButtonsVisible, setNavButtonsVisible] = useState(false);
   const navTimeoutRef = useRef<number | null>(null);
