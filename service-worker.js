@@ -35,26 +35,36 @@ const urlsToCache = [
 
 self.addEventListener('install', event => {
   console.log('Service Worker installing, caching URLs:', urlsToCache);
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Cache opened, adding all URLs');
-        return cache.addAll(urlsToCache)
-          .then(() => console.log('All resources cached successfully'))
-          .catch(error => {
-            console.error('Failed to cache resources:', error);
-            // Try to cache files individually to identify problematic ones
-            return Promise.all(
-              urlsToCache.map(url => {
-                return cache.add(url)
-                  .then(() => console.log(`Successfully cached: ${url}`))
-                  .catch(err => console.error(`Failed to cache: ${url}`, err));
-              })
-            );
-          });
-      })
-  );
+  event.waitUntil(precacheAssets());
+  self.skipWaiting();
 });
+
+async function precacheAssets() {
+  const cache = await caches.open(CACHE_NAME);
+  try {
+    await cache.addAll(urlsToCache);
+
+    // Fetch index.html to extract hashed asset names for precaching
+    const indexRes = await fetch(joinPaths(BASE_PATH, '/index.html'));
+    if (indexRes.ok) {
+      const html = await indexRes.text();
+      const assetRegex = /["']([^"']*?assets\/[^"']+)["']/g;
+      const assets = new Set();
+      let match;
+      while ((match = assetRegex.exec(html))) {
+        assets.add(joinPaths(BASE_PATH, match[1]));
+      }
+      await cache.addAll([...assets]);
+      await cache.put(
+        joinPaths(BASE_PATH, '/index.html'),
+        new Response(html, { headers: { 'Content-Type': 'text/html' } })
+      );
+    }
+    console.log('All resources cached successfully');
+  } catch (error) {
+    console.error('Failed to cache resources:', error);
+  }
+}
 
 self.addEventListener('activate', event => {
   event.waitUntil(
@@ -64,17 +74,18 @@ self.addEventListener('activate', event => {
       )
     )
   );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
-  // Skip cross-origin requests
-  if (event.request.url.startsWith(self.location.origin)) {
+  // Skip cross-origin requests and non-GET requests
+  if (event.request.url.startsWith(self.location.origin) && event.request.method === 'GET') {
     event.respondWith(
       caches.open(CACHE_NAME).then(cache => {
         return fetch(event.request)
           .then(response => {
             // If we got a valid response, cache it
-            if (response.status === 200) {
+            if (response.ok) {
               cache.put(event.request, response.clone());
             }
             return response;
