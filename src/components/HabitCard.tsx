@@ -28,7 +28,7 @@ const DragHandle: React.FC<DragHandleProps> = ({ dragHandleProps }) => {
   if (!dragHandleProps) return null;
   
   return (
-    <div className="absolute top-2 right-2 opacity-100 opacity-0 group-hover:opacity-100 transition-opacity" {...dragHandleProps}>
+    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity" {...dragHandleProps}>
       <GripVertical className="h-5 w-5 text-gray-400 cursor-grab" />
     </div>
   );
