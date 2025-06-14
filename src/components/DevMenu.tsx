@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getLocalDateString } from '../utils/date';
 import type { Habit } from '../types/Habit';
 
@@ -10,6 +10,26 @@ interface DevMenuProps {
 
 const DevMenu: React.FC<DevMenuProps> = ({ habits, setHabits, setSelectedHabitId }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isOpen]);
+
 
   // Clear all habit data
   const handleClearData = () => {
@@ -94,7 +114,7 @@ const DevMenu: React.FC<DevMenuProps> = ({ habits, setHabits, setSelectedHabitId
   };
 
   return (
-    <div className="fixed bottom-4 left-4 z-50">
+    <div className="fixed bottom-4 left-4 z-50" ref={menuRef}>
       {isOpen && (
         <div className="mt-2 bg-white border border-gray-200 rounded shadow-lg">
           <button
