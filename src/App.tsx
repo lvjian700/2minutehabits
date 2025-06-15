@@ -117,7 +117,7 @@ const App: React.FC = () => {
         </div>
       )}
       {archivedHabits.length > 0 && (
-        <div className="mt-8">
+        <div className="relative max-w-4xl mx-auto mt-8">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">Archived Habits</h2>
           <div className="space-y-3">
             {archivedHabits.map(h => {
