@@ -56,8 +56,11 @@ const App: React.FC = () => {
       })
     );
   };
-  
 
+  // Resume an archived habit
+  const resumeHabit = (habitId: number) => {
+    setHabits(prev => prev.map(h => (h.id === habitId ? { ...h, archived: false } : h)));
+  };
 
   return (
     <>
@@ -131,7 +134,10 @@ const App: React.FC = () => {
                       <p className="text-sm text-gray-600">Completed Days: {completedDays}</p>
                     </div>
                   </div>
-                  <button className="px-3 py-1.5 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed" disabled>
+                  <button
+                    className="px-3 py-1.5 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                    onClick={() => resumeHabit(h.id)}
+                  >
                     Resume
                   </button>
                 </div>
