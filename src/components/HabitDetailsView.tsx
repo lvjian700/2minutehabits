@@ -11,7 +11,8 @@ interface HabitDetailsViewProps {
   habit: Habit;
   onToggle: (date: string) => void;
   onClose: () => void;
-  onEditHabit?: (habitId: number, updates: Partial<Habit>) => void;
+  onEditHabit: (habitId: number, updates: Partial<Habit>) => void;
+  onArchive: (habitId: number) => void;
 }
 
 // Dropdown Menu Component
@@ -95,12 +96,10 @@ const DropdownMenu: React.FC<{
   );
 };
 
-const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, onClose, onEditHabit }) => {
+const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({ habit, onToggle, onClose, onEditHabit, onArchive }) => {
   const handleArchive = () => {
     if (window.confirm('Archive this habit? You can resume it later from the archived list.')) {
-      if (onEditHabit) {
-        onEditHabit(habit.id, { archived: true });
-      }
+      onArchive(habit.id);
       onClose();
     }
   };

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getLocalDateString } from '../utils/date';
-import type { Habit } from '../types/Habit';
+import type { HabitStore } from '../types/Habit';
 
 interface DevMenuProps {
-  habits: Habit[];
-  setHabits: (habits: Habit[]) => void;
+  habits: HabitStore;
+  setHabits: (habits: HabitStore) => void;
   setSelectedHabitId: (id: number | null) => void;
 }
 
@@ -34,30 +34,32 @@ const DevMenu: React.FC<DevMenuProps> = ({ habits, setHabits, setSelectedHabitId
   // Clear all habit data
   const handleClearData = () => {
     if (confirm('Clear all habit data? This cannot be undone.')) {
-      localStorage.removeItem('habitTrackerData');
-      setHabits([]);
+      localStorage.removeItem('habits');
+      setHabits({ active: [], inactive: [] });
       setSelectedHabitId(null);
       setIsOpen(false);
     }
   };
   
   // Current app version
-  const APP_VERSION = '0.0.1';
+  const APP_VERSION = '0.1.0';
   
   // Export data as JSON file
   const handleExportData = () => {
     try {
-      // Include version number with the data
       const exportData = {
         version: APP_VERSION,
-        habits: habits
+        habits: {
+          active: habits.active,
+          inactive: habits.inactive
+        }
       };
       const data = JSON.stringify(exportData, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `habit-tracker-backup-${getLocalDateString()}.json`;
+      a.download = `2-minutes-habits-backup-${getLocalDateString()}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -82,24 +84,16 @@ const DevMenu: React.FC<DevMenuProps> = ({ habits, setHabits, setSelectedHabitId
         try {
           const importedData = JSON.parse(event.target?.result as string);
           
-          // Handle both versioned and legacy data formats
-          let habitsData;
-          
-          if (importedData.version && Array.isArray(importedData.habits)) {
-            // New format with version
-            habitsData = importedData.habits;
-            console.log(`Importing data from version ${importedData.version}`);
-          } else if (Array.isArray(importedData)) {
-            // Legacy format (just an array)
-            habitsData = importedData;
-            console.log('Importing legacy data format');
+          let importedHabits: HabitStore;
+
+          if(importedData.version == '0.1.0' && importedData.habits.active && importedData.habits.inactive){
+            importedHabits = importedData.habits;
           } else {
             throw new Error('Invalid data format');
           }
           
-          // Confirm before overwriting
           if (confirm('Import this data? This will replace your current habits.')) {
-            setHabits(habitsData);
+            setHabits(importedHabits);
             setSelectedHabitId(null);
             setIsOpen(false);
           }

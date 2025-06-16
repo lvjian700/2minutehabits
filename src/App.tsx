@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import type { Habit } from './types/Habit';
+import React, { useState } from 'react';
+import type { Habit, HabitStore } from './types/Habit';
 import { getLocalDateString } from './utils/date';
 import HabitsDndGrid from './components/HabitsDndGrid';
 import useLocalStorage from './hooks/useLocalStorage';
@@ -22,44 +22,113 @@ const SUGGESTIONS = [
 ];
 
 const App: React.FC = () => {
-  const [habits, setHabits] = useLocalStorage<Habit[]>('habitTrackerData', []);
-  // Split habits into active and archived
-  const activeHabits = habits.filter(h => !h.archived);
-  const archivedHabits = habits.filter(h => h.archived);
-  const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
-  
   // Use the visibility refresh hook to handle date changes when tab becomes active
   useVisibilityRefresh();
 
-  const saveHabits = (newHabits: Omit<Habit, 'logs'>[]) => {
+  // Store now contains separate arrays for active and inactive (archived) habits
+  const [store, setStore] = useLocalStorage<HabitStore>('habits', {
+    active: [],
+    inactive: []
+  });
+
+  const habits: Habit[] = [...store.active, ...store.inactive];
+  const activeHabits = store.active;
+  const archivedHabits = store.inactive;
+  const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
+
+  /**
+   * Update the ordering / contents of the ACTIVE habits list only.
+   * - `next` can be either a new array of `Habit`s or a callback that
+   *   receives the previous `active` array and returns the new one.
+   * - Ensures all returned habits are **not** archived.
+   * - Re-indexes `priority` so they are sequential starting from 1.
+   * - Leaves the `inactive` list untouched.
+   */
+  const setActiveHabits = (
+    next: Habit[] | ((prevActive: Habit[]) => Habit[])
+  ) => {
+    setStore(prev => {
+      const previousActive = prev.active;
+      const newActive = (typeof next === 'function'
+        ? (next as (p: Habit[]) => Habit[])(previousActive)
+        : next
+      ).filter(h => !h.archived);
+
+      // Ensure priorities are continuous starting at 1
+      const withCorrectPriority = newActive.map((h, idx) => ({
+        ...h,
+        priority: idx + 1
+      }));
+
+      return {
+        active: withCorrectPriority,
+        inactive: prev.inactive
+      };
+    });
+  };
+
+  const addNewHabits = (newHabits: Omit<Habit, 'logs'>[]) => {
     const formatted = newHabits.map(h => ({ ...h, logs: {} }));
-    setHabits(formatted);
+    setStore(prev => ({
+      active: [...prev.active, ...formatted],
+      inactive: prev.inactive
+    }));
   };
 
   const updateHabit = (habitId: number, updates: Partial<Habit>) => {
-    setHabits(prevHabits =>
-      prevHabits.map(habit =>
-        habit.id === habitId ? { ...habit, ...updates } : habit
-      )
-    );
+    setStore(prev => ({
+      active: prev.active.map(h => (h.id === habitId ? { ...h, ...updates } : h)),
+      inactive: prev.inactive.map(h => (h.id === habitId ? { ...h, ...updates } : h))
+    }));
+  };
+
+  const archiveHabit = (habitId: number) => {
+    setStore(prev => {
+      // Find the habit in the active list
+      const habit = prev.active.find(h => h.id === habitId);
+      if(habit == null) return prev;
+
+      const habitToArchive = { ...habit, archived: true };
+
+      // Remove from active list
+      const remainingActive = prev.active.filter(h => h.id !== habitId);
+
+      // Re-assign priority so they are sequential starting from 1
+      const rePrioritised = remainingActive.map((h, i) => ({ ...h, priority: i + 1 }));
+
+      return {
+        active: rePrioritised,
+        inactive: [...prev.inactive, habitToArchive]
+      };
+    });
   };
 
   const toggleLog = (habitId: number, dateStr: string) => {
-    setHabits(prev =>
-      prev.map(h => {
-        if (h.id === habitId) {
-          if (h.archived) return h; // prevent toggling archived habits
-          const updatedLogs = { ...h.logs, [dateStr]: !h.logs[dateStr] };
-          return { ...h, logs: updatedLogs };
-        }
-        return h;
-      })
-    );
+    setStore(prev => ({
+      active: prev.active.map(h => {
+        if (h.id !== habitId) return h;
+        if (h.archived) return h; // shouldn't happen in active, but guard
+        const updatedLogs = { ...h.logs, [dateStr]: !h.logs[dateStr] };
+        return { ...h, logs: updatedLogs };
+      }),
+      inactive: prev.inactive
+    }));
   };
 
   // Resume an archived habit
   const resumeHabit = (habitId: number) => {
-    setHabits(prev => prev.map(h => (h.id === habitId ? { ...h, archived: false } : h)));
+    setStore(prev => {
+      // find the habit in inactive list
+      const habit = prev.inactive.find(h => h.id === habitId);
+      if (!habit) return prev; // nothing to do
+
+      const newPriority = prev.active.length + 1;
+      const revived = { ...habit, archived: false, priority: newPriority };
+      return {
+        active: [...prev.active, revived],
+        inactive: prev.inactive.filter(h => h.id !== habitId)
+      };
+    });
   };
 
   return (
@@ -71,7 +140,7 @@ const App: React.FC = () => {
           suggestions={SUGGESTIONS}
           maxSelectable={5}
           defaultRandomCount={3}
-          onSave={saveHabits}
+          onSave={addNewHabits}
         />
       )}
       {habits.length > 0 && (
@@ -89,7 +158,7 @@ const App: React.FC = () => {
                 if(bi===-1) return -1;
                 return ai - bi;
               });
-              setHabits(reordered);
+              setActiveHabits(reordered);
             }}
             onToggle={(habitId) =>
               toggleLog(
@@ -114,6 +183,7 @@ const App: React.FC = () => {
                 }
                 onClose={() => setSelectedHabitId(null)}
                 onEditHabit={updateHabit}
+                onArchive={archiveHabit}
               />
             )}
           </Modal>
@@ -149,8 +219,8 @@ const App: React.FC = () => {
       </div>
       {/* Developer menu */}
       <DevMenu 
-        habits={habits} 
-        setHabits={setHabits} 
+        habits={store} 
+        setHabits={setStore} 
         setSelectedHabitId={setSelectedHabitId} 
       />
     </>
