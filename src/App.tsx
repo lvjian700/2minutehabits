@@ -5,7 +5,7 @@ import useHabits from './hooks/useHabits';
 import SetupModal from './components/SetupModal';
 import HabitDetailsView from './components/HabitDetailsView';
 import Modal from './components/Modal';
-import DevMenu from './components/DevMenu';
+import AppMenu from './components/AppMenu';
 import { useVisibilityRefresh } from './hooks/useDateRefresh';
 
 // Predefined habit suggestions for onboarding (single-emoji icons)
@@ -123,8 +123,8 @@ const App: React.FC = () => {
         </div>
       )}
       </div>
-      {/* Developer menu */}
-      <DevMenu
+      {/* App menu */}
+      <AppMenu
         setSelectedHabitId={setSelectedHabitId}
       />
     </>

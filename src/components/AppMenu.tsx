@@ -3,11 +3,11 @@ import { getLocalDateString } from '../utils/date';
 import useHabits from '../hooks/useHabits';
 import type { HabitStore } from '../types/Habit';
 
-interface DevMenuProps {
+interface AppMenuProps {
   setSelectedHabitId: (id: number | null) => void;
 }
 
-const DevMenu: React.FC<DevMenuProps> = ({ setSelectedHabitId }) => {
+const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const { store: habits, setStore: setHabits } = useHabits();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -141,4 +141,4 @@ const DevMenu: React.FC<DevMenuProps> = ({ setSelectedHabitId }) => {
   );
 };
 
-export default DevMenu;
+export default AppMenu;
