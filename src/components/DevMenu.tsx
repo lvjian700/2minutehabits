@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getLocalDateString } from '../utils/date';
+import useHabits from '../hooks/useHabits';
 import type { HabitStore } from '../types/Habit';
 
 interface DevMenuProps {
-  habits: HabitStore;
-  setHabits: (habits: HabitStore) => void;
   setSelectedHabitId: (id: number | null) => void;
 }
 
-const DevMenu: React.FC<DevMenuProps> = ({ habits, setHabits, setSelectedHabitId }) => {
+const DevMenu: React.FC<DevMenuProps> = ({ setSelectedHabitId }) => {
+  const { store: habits, setStore: setHabits } = useHabits();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
