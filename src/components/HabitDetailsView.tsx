@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import type { Habit } from '../types/Habit';
-import { MoreHorizontal, X } from 'lucide-react';
+import { Archive, MoreHorizontal, X } from 'lucide-react';
 import CalendarView from './CalendarView';
 import EditableText from './EditableText';
 import EmojiPickerPopover from './EmojiPickerPopover';
@@ -82,6 +82,7 @@ const DropdownMenu: React.FC<{
           onArchive();
         }}
       >
+        <Archive size={16} className="mr-2" />
         Archive
       </button>
       <button
