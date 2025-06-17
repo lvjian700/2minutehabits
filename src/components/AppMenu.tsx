@@ -3,6 +3,9 @@ import { getLocalDateString } from '../utils/date';
 import useHabits from '../hooks/useHabits';
 import type { HabitStore } from '../types/Habit';
 
+// Current app version
+const APP_VERSION = '0.1.0';
+
 interface AppMenuProps {
   setSelectedHabitId: (id: number | null) => void;
 }
@@ -40,10 +43,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       setIsMenuOpen(false);
     }
   };
-  
-  // Current app version
-  const APP_VERSION = '0.1.0';
-  
+
   // Export data as JSON file
   const handleExportData = () => {
     try {
