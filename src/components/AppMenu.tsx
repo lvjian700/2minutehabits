@@ -9,16 +9,16 @@ interface AppMenuProps {
 
 const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const { store: habits, setStore: setHabits } = useHabits();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isMenuOpen) return;
 
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        setIsMenuOpen(false);
       }
     };
 
@@ -28,7 +28,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isMenuOpen]);
 
 
   // Clear all habit data
@@ -37,7 +37,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       localStorage.removeItem('habits');
       setHabits({ active: [], inactive: [] });
       setSelectedHabitId(null);
-      setIsOpen(false);
+      setIsMenuOpen(false);
     }
   };
   
@@ -95,7 +95,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
           if (confirm('Import this data? This will replace your current habits.')) {
             setHabits(importedHabits);
             setSelectedHabitId(null);
-            setIsOpen(false);
+            setIsMenuOpen(false);
           }
         } catch (error) {
           console.error('Import failed:', error);
@@ -109,7 +109,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
 
   return (
     <div className="fixed bottom-4 left-4 z-50" ref={menuRef}>
-      {isOpen && (
+      {isMenuOpen && (
         <div className="mt-2 bg-white border border-gray-200 rounded shadow-lg">
           <button
             onClick={handleExportData}
@@ -132,7 +132,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
         </div>
       )}
       <button
-        onClick={() => setIsOpen(open => !open)}
+        onClick={() => setIsMenuOpen(open => !open)}
         className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full shadow-lg transition"
       >
         ⚙️
