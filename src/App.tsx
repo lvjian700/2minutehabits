@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import type { Habit } from './types/Habit';
+import React, { useState } from 'react';
 import { getLocalDateString } from './utils/date';
 import HabitsDndGrid from './components/HabitsDndGrid';
-import useLocalStorage from './hooks/useLocalStorage';
+import useHabits from './hooks/useHabits';
 import SetupModal from './components/SetupModal';
 import HabitDetailsView from './components/HabitDetailsView';
 import Modal from './components/Modal';
@@ -22,38 +21,21 @@ const SUGGESTIONS = [
 ];
 
 const App: React.FC = () => {
-  const [habits, setHabits] = useLocalStorage<Habit[]>('habitTrackerData', []);
-  const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
-  
   // Use the visibility refresh hook to handle date changes when tab becomes active
   useVisibilityRefresh();
 
-  const saveHabits = (newHabits: Omit<Habit, 'logs'>[]) => {
-    const formatted = newHabits.map(h => ({ ...h, logs: {} }));
-    setHabits(formatted);
-  };
-
-  const updateHabit = (habitId: number, updates: Partial<Habit>) => {
-    setHabits(prevHabits =>
-      prevHabits.map(habit =>
-        habit.id === habitId ? { ...habit, ...updates } : habit
-      )
-    );
-  };
-
-  const toggleLog = (habitId: number, dateStr: string) => {
-    setHabits(prev =>
-      prev.map(h => {
-        if (h.id === habitId) {
-          const updatedLogs = { ...h.logs, [dateStr]: !h.logs[dateStr] };
-          return { ...h, logs: updatedLogs };
-        }
-        return h;
-      })
-    );
-  };
-  
-
+  const {
+    habits,
+    activeHabits,
+    archivedHabits,
+    setActiveHabits,
+    addNewHabits,
+    updateHabit,
+    archiveHabit,
+    resumeHabit,
+    toggleLog,
+  } = useHabits();
+  const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
 
   return (
     <>
@@ -64,15 +46,26 @@ const App: React.FC = () => {
           suggestions={SUGGESTIONS}
           maxSelectable={5}
           defaultRandomCount={3}
-          onSave={saveHabits}
+          onSave={addNewHabits}
         />
       )}
       {habits.length > 0 && (
         <div className="relative max-w-4xl mx-auto">
           {/* Grid view of habits */}
           <HabitsDndGrid
-            habits={habits}
-            onReorder={setHabits}
+            habits={activeHabits}
+            onReorder={newActive => {
+              // Maintain order only within active habits
+              const newOrderIds = newActive.map(h => h.id);
+              const reordered = [...habits].sort((a,b)=>{
+                const ai = newOrderIds.indexOf(a.id);
+                const bi = newOrderIds.indexOf(b.id);
+                if(ai===-1) return 1; // archived stay at bottom
+                if(bi===-1) return -1;
+                return ai - bi;
+              });
+              setActiveHabits(reordered);
+            }}
             onToggle={(habitId) =>
               toggleLog(
                 habitId,
@@ -96,17 +89,43 @@ const App: React.FC = () => {
                 }
                 onClose={() => setSelectedHabitId(null)}
                 onEditHabit={updateHabit}
+                onArchive={archiveHabit}
               />
             )}
           </Modal>
         </div>
       )}
+      {archivedHabits.length > 0 && (
+        <div className="relative max-w-4xl mx-auto mt-8">
+          <h2 className="text-lg font-semibold text-gray-700 mb-4">Archived Habits</h2>
+          <div className="space-y-3">
+            {archivedHabits.map(h => {
+              const completedDays = h.logs ? Object.values(h.logs).filter(Boolean).length : 0;
+              return (
+                <div key={h.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="flex items-center space-x-4">
+                    <span className="text-3xl">{h.icon}</span>
+                    <div>
+                      <p className="font-medium text-gray-800">{h.name}</p>
+                      <p className="text-sm text-gray-600">Completed Days: {completedDays}</p>
+                    </div>
+                  </div>
+                  <button
+                    className="px-3 py-1.5 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                    onClick={() => resumeHabit(h.id)}
+                  >
+                    Resume
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       </div>
       {/* Developer menu */}
-      <DevMenu 
-        habits={habits} 
-        setHabits={setHabits} 
-        setSelectedHabitId={setSelectedHabitId} 
+      <DevMenu
+        setSelectedHabitId={setSelectedHabitId}
       />
     </>
   );
