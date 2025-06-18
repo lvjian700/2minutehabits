@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu as MenuIcon, Trash2, Laptop, HardDriveUpload } from 'lucide-react';
+import { Menu as MenuIcon, Trash2, Laptop, type LucideIcon, Plus, RefreshCcwDot } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
 
@@ -7,6 +7,26 @@ import useHabits from '../hooks/useHabits';
 interface AppMenuProps {
   setSelectedHabitId: (id: number | null) => void;
 }
+
+interface MenuItemProps {
+  label: string;
+  icon: LucideIcon;
+  onClick: () => void;
+}
+
+const MenuItem: React.FC<MenuItemProps> = ({ label, icon: Icon, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`flex items-center gap-2 w-full text-left px-4 py-1 text-gray-800 hover:bg-yellow-400 hover:text-white rounded-lg`}
+  >
+    <Icon size={16} />
+    <span>{label}</span>
+  </button>
+);
+
+const MenuDivider: React.FC = () => (
+  <div className="h-px mx-3 my-2 bg-gray-200" />
+);
 
 const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const { store: habits, setStore: setHabits } = useHabits();
@@ -77,6 +97,10 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
     input.click();
   };
 
+  function handleAddNewHabit(): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="absolute top-0 right-0 z-50" ref={menuRef}>
       {/* Icon button */}
@@ -90,27 +114,12 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       {/* Dropdown menu attached to bottom of icon */}
       {isMenuOpen && (
         <div className="absolute right-0 mt-2 w-48 p-2 rounded-xl shadow-lg bg-white/60 backdrop-blur-md backdrop-saturate-150 border border-black/10">
-          <button
-            onClick={handleExportData}
-            className="flex items-center gap-4 w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-400 hover:text-white border-b border-white/20 rounded-md"
-          >
-            <Laptop size={16} />
-            <span>Backup Data</span>
-          </button>
-          <button
-            onClick={handleImportData}
-            className="flex items-center gap-4 w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-400 hover:text-white border-b border-white/20 rounded-md"
-          >
-            <HardDriveUpload size={16} />
-            <span>Restore Data</span>
-          </button>
-          <button
-            onClick={handleClearData}
-            className="flex items-center gap-4 w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-400 hover:text-white border-b border-white/20 rounded-md"
-          >
-            <Trash2 size={16} />
-            <span>Clear Data</span>
-          </button>
+          <MenuItem label="Add a habit" icon={Plus} onClick={handleAddNewHabit} />
+          <MenuDivider />
+          <MenuItem label="Backup data" icon={Laptop} onClick={handleExportData} />
+          <MenuItem label="Restore data" icon={RefreshCcwDot} onClick={handleImportData} />
+          <MenuDivider />
+          <MenuItem label="Clear data" icon={Trash2} onClick={handleClearData} />
         </div>
       )}
     </div>
