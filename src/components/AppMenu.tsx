@@ -82,31 +82,31 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       {/* Icon button */}
       <button
         onClick={() => setIsMenuOpen(open => !open)}
-        className="p-2 rounded-full shadow-lg transition bg-white/20 hover:bg-white/30 backdrop-blur-md backdrop-saturate-150 border border-white/30"
+        className="p-2 rounded-full shadow-lg transition bg-white/20 hover:bg-yellow-400 hover:text-white backdrop-blur-md backdrop-saturate-150 border border-white/30"
       >
         <MenuIcon size={20} />
       </button>
 
       {/* Dropdown menu attached to bottom of icon */}
       {isMenuOpen && (
-        <div className="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-white/20 backdrop-blur-md backdrop-saturate-150 border border-white/30">
+        <div className="absolute right-0 mt-2 w-48 p-2 rounded-xl shadow-lg bg-white/60 backdrop-blur-md backdrop-saturate-150 border border-black/10">
           <button
             onClick={handleExportData}
-            className="flex items-center gap-2 w-full text-left px-4 py-2 text-gray-800 hover:bg-white/30 border-b border-white/20"
+            className="flex items-center gap-4 w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-400 hover:text-white border-b border-white/20 rounded-md"
           >
             <Laptop size={16} />
             <span>Backup Data</span>
           </button>
           <button
             onClick={handleImportData}
-            className="flex items-center gap-2 w-full text-left px-4 py-2 text-gray-800 hover:bg-white/30 border-b border-white/20"
+            className="flex items-center gap-4 w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-400 hover:text-white border-b border-white/20 rounded-md"
           >
             <HardDriveUpload size={16} />
             <span>Restore Data</span>
           </button>
           <button
             onClick={handleClearData}
-            className="flex items-center gap-2 w-full text-left px-4 py-2 text-gray-800 hover:bg-white/30"
+            className="flex items-center gap-4 w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-400 hover:text-white border-b border-white/20 rounded-md"
           >
             <Trash2 size={16} />
             <span>Clear Data</span>
