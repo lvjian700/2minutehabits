@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu as MenuIcon } from 'lucide-react';
-import { getLocalDateString } from '../utils/date';
+import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
-import type { HabitStore } from '../types/Habit';
 
-// Current app version
-const APP_VERSION = '0.1.0';
 
 interface AppMenuProps {
   setSelectedHabitId: (id: number | null) => void;
@@ -49,23 +46,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   // Export data as JSON file
   const handleExportData = () => {
     try {
-      const exportData = {
-        version: APP_VERSION,
-        habits: {
-          active: habits.active,
-          inactive: habits.inactive
-        }
-      };
-      const data = JSON.stringify(exportData, null, 2);
-      const blob = new Blob([data], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `2-minutes-habits-backup-${getLocalDateString()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      exportHabitsToFile(habits);
     } catch (error) {
       console.error('Export failed:', error);
       alert('Failed to export data. Please try again.');
@@ -77,34 +58,21 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'application/json';
-    input.onchange = (e) => {
+    input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const importedData = JSON.parse(event.target?.result as string);
-          
-          let importedHabits: HabitStore;
 
-          if(importedData.version == '0.1.0' && importedData.habits.active && importedData.habits.inactive){
-            importedHabits = importedData.habits;
-          } else {
-            throw new Error('Invalid data format');
-          }
-          
-          if (confirm('Import this data? This will replace your current habits.')) {
-            setHabits(importedHabits);
-            setSelectedHabitId(null);
-            closeMenu();
-          }
-        } catch (error) {
-          console.error('Import failed:', error);
-          alert('Failed to import data. Please check the file format.');
+      try {
+        const importedHabits = await importHabitsFromFile(file);
+        if (confirm('Import this data? This will replace your current habits.')) {
+          setHabits(importedHabits);
+          setSelectedHabitId(null);
+          closeMenu();
         }
-      };
-      reader.readAsText(file);
+      } catch (error) {
+        console.error('Import failed:', error);
+        alert('Failed to import data. Please check the file format.');
+      }
     };
     input.click();
   };
