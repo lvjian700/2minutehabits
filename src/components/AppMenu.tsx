@@ -110,7 +110,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   };
 
   return (
-    <div className="fixed bottom-4 left-4 z-50" ref={menuRef}>
+    <div className="absolute top-0 right-0 z-50" ref={menuRef}>
       {isMenuOpen && (
         <div className="mt-2 bg-white border border-gray-200 rounded shadow-lg">
           <button
@@ -135,7 +135,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       )}
       <button
         onClick={() => setIsMenuOpen(open => !open)}
-        className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full shadow-lg transition"
+        className="p-2 rounded-full shadow-lg transition bg-white/20 hover:bg-white/30 backdrop-blur-md backdrop-saturate-150 border border-white/30"
       >
         <MenuIcon size={20} />
       </button>

@@ -40,7 +40,14 @@ const App: React.FC = () => {
   return (
     <>
       <div className="min-h-screen p-4">
+      <div className="relative max-w-4xl mx-auto">
       <h1 className="text-title-lg mb-6 text-color-title text-center">2-Minute Habits</h1>
+      {habits.length > 0 && (
+        <AppMenu
+          setSelectedHabitId={setSelectedHabitId}
+        />
+      )}
+      </div>
       {habits.length === 0 && (
         <SetupModal
           suggestions={SUGGESTIONS}
@@ -123,10 +130,6 @@ const App: React.FC = () => {
         </div>
       )}
       </div>
-      {/* App menu */}
-      <AppMenu
-        setSelectedHabitId={setSelectedHabitId}
-      />
     </>
   );
 };
