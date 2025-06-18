@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Menu as MenuIcon } from 'lucide-react';
 import { getLocalDateString } from '../utils/date';
 import useHabits from '../hooks/useHabits';
 import type { HabitStore } from '../types/Habit';
@@ -136,7 +137,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
         onClick={() => setIsMenuOpen(open => !open)}
         className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full shadow-lg transition"
       >
-        ⚙️
+        <MenuIcon size={20} />
       </button>
     </div>
   );
