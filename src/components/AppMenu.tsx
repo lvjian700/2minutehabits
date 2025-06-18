@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu as MenuIcon } from 'lucide-react';
+import { Menu as MenuIcon, Trash2, Laptop, HardDriveUpload } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
 
@@ -89,24 +89,27 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
 
       {/* Dropdown menu attached to bottom of icon */}
       {isMenuOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg">
+        <div className="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-white/20 backdrop-blur-md backdrop-saturate-150 border border-white/30">
           <button
             onClick={handleExportData}
-            className="block w-full text-left px-4 py-2 text-blue-600 hover:bg-gray-100 border-b border-gray-200"
+            className="flex items-center gap-2 w-full text-left px-4 py-2 text-gray-800 hover:bg-white/30 border-b border-white/20"
           >
-            Export Data
+            <Laptop size={16} />
+            <span>Backup Data</span>
           </button>
           <button
             onClick={handleImportData}
-            className="block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-100 border-b border-gray-200"
+            className="flex items-center gap-2 w-full text-left px-4 py-2 text-gray-800 hover:bg-white/30 border-b border-white/20"
           >
-            Import Data
+            <HardDriveUpload size={16} />
+            <span>Restore Data</span>
           </button>
           <button
             onClick={handleClearData}
-            className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+            className="flex items-center gap-2 w-full text-left px-4 py-2 text-gray-800 hover:bg-white/30"
           >
-            Clear Data
+            <Trash2 size={16} />
+            <span>Clear Data</span>
           </button>
         </div>
       )}
