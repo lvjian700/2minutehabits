@@ -79,8 +79,17 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
 
   return (
     <div className="absolute top-0 right-0 z-50" ref={menuRef}>
+      {/* Icon button */}
+      <button
+        onClick={() => setIsMenuOpen(open => !open)}
+        className="p-2 rounded-full shadow-lg transition bg-white/20 hover:bg-white/30 backdrop-blur-md backdrop-saturate-150 border border-white/30"
+      >
+        <MenuIcon size={20} />
+      </button>
+
+      {/* Dropdown menu attached to bottom of icon */}
       {isMenuOpen && (
-        <div className="mt-2 bg-white border border-gray-200 rounded shadow-lg">
+        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg">
           <button
             onClick={handleExportData}
             className="block w-full text-left px-4 py-2 text-blue-600 hover:bg-gray-100 border-b border-gray-200"
@@ -101,12 +110,6 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
           </button>
         </div>
       )}
-      <button
-        onClick={() => setIsMenuOpen(open => !open)}
-        className="p-2 rounded-full shadow-lg transition bg-white/20 hover:bg-white/30 backdrop-blur-md backdrop-saturate-150 border border-white/30"
-      >
-        <MenuIcon size={20} />
-      </button>
     </div>
   );
 };
