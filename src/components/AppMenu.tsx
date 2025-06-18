@@ -13,6 +13,7 @@ interface AppMenuProps {
 const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const { store: habits, setStore: setHabits } = useHabits();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeMenu = () => setIsMenuOpen(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -21,7 +22,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
 
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
+        closeMenu();
       }
     };
 
@@ -40,7 +41,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       localStorage.removeItem('habits');
       setHabits({ active: [], inactive: [] });
       setSelectedHabitId(null);
-      setIsMenuOpen(false);
+      closeMenu();
     }
   };
 
@@ -95,7 +96,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
           if (confirm('Import this data? This will replace your current habits.')) {
             setHabits(importedHabits);
             setSelectedHabitId(null);
-            setIsMenuOpen(false);
+            closeMenu();
           }
         } catch (error) {
           console.error('Import failed:', error);
