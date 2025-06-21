@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import useClickOutside from '../hooks/useClickOutside';
 import ReactDOM from 'react-dom';
 import type { Habit } from '../types/Habit';
 import { Archive, MoreHorizontal, X } from 'lucide-react';
@@ -41,26 +42,7 @@ const DropdownMenu: React.FC<{
     }
   }, [isOpen, buttonRef]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen, onClose, buttonRef]);
+  useClickOutside(menuRef, onClose, { active: isOpen, ignoreRefs: [buttonRef] });
 
   if (!isOpen) return null;
 
