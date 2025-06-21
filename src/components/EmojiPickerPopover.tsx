@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import type { EmojiData } from '../types/EmojiData';
+import useClickOutside from '../hooks/useClickOutside';
 
 interface EmojiPickerPopoverProps {
   anchorRef: React.RefObject<HTMLDivElement>;
@@ -26,23 +27,7 @@ const EmojiPickerPopover: React.FC<EmojiPickerPopoverProps> = ({ anchorRef, isOp
     }
   }, [isOpen, anchorRef]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleOutside = (event: MouseEvent) => {
-      if (
-        pickerRef.current &&
-        !pickerRef.current.contains(event.target as Node) &&
-        anchorRef.current &&
-        !anchorRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    };
-    document.addEventListener('mousedown', handleOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleOutside);
-    };
-  }, [isOpen, onClose, anchorRef]);
+  useClickOutside(pickerRef, onClose, { active: isOpen, ignoreRefs: [anchorRef] });
 
   if (!isOpen) return null;
 
@@ -57,7 +42,7 @@ const EmojiPickerPopover: React.FC<EmojiPickerPopoverProps> = ({ anchorRef, isOp
         pointerEvents: visible ? 'auto' : 'none',
       }}
     >
-      <Picker data={data} onEmojiSelect={(emoji) => onSelect(emoji as EmojiData)} theme="light" />
+      <Picker data={data} onEmojiSelect={(emoji: EmojiData) => onSelect(emoji)} theme="light" />
     </div>,
     document.body
   );

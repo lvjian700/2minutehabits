@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Menu as MenuIcon, Trash2, Laptop, type LucideIcon, Plus, RefreshCcwDot } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
+import useClickOutside from '../hooks/useClickOutside';
 
 
 interface AppMenuProps {
@@ -33,24 +34,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
   const menuRef = useRef<HTMLDivElement>(null);
-
-  // Close menu when clicking outside
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        closeMenu();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, [isMenuOpen]);
+  useClickOutside(menuRef, closeMenu, { active: isMenuOpen });
 
 
   // Clear all habit data

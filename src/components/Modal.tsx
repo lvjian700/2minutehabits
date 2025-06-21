@@ -1,12 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 
+import useClickOutside from '../hooks/useClickOutside';
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  dialogClassName?: string;
+  closeOnOutsideClick?: boolean;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  dialogClassName,
+  closeOnOutsideClick = true,
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Close on escape key press
@@ -29,23 +39,17 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     };
   }, [isOpen, onClose]);
 
-  // Close when clicking outside the modal
-  const handleOutsideClick = (e: React.MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      onClose();
-    }
-  };
+  useClickOutside(modalRef, onClose, { active: isOpen && closeOnOutsideClick });
 
   if (!isOpen) return null;
 
   return (
     <div 
       className="fixed inset-0 z-50 flex items-start justify-center pt-16 p-4 bg-black bg-opacity-50 transition-opacity"
-      onClick={handleOutsideClick}
     >
-      <div 
+      <div
         ref={modalRef}
-        className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-auto transform transition-all"
+        className={`bg-white rounded-xl shadow-xl w-full max-h-[90vh] overflow-auto transform transition-all ${dialogClassName ?? 'max-w-2xl'}`}
         onClick={e => e.stopPropagation()}
       >
         {children}
