@@ -65,6 +65,14 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   useClickOutside(newHabitRef, () => setIsNewHabitOpen(false), { active: isNewHabitOpen });
   const [newHabitName, setNewHabitName] = useState('');
   const closeMenu = () => setIsMenuOpen(false);
+
+  const toggleOverflowMenu = () => {
+    setIsMenuOpen(prev => {
+      const next = !prev;
+      if (next) setIsNewHabitOpen(false);
+      return next;
+    });
+  };
   const menuRef = useRef<HTMLDivElement>(null);
   useClickOutside(menuRef, closeMenu, { active: isMenuOpen });
 
@@ -114,7 +122,8 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   };
 
   const handleAddNewHabit = () => {
-    setIsNewHabitOpen(true);
+    setIsNewHabitOpen(open => !open);
+    setIsMenuOpen(false);
   };
 
   const handleSaveNewHabit = () => {
@@ -139,7 +148,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
     <div className="absolute top-0 right-0 z-50" ref={menuRef}>
       <div className="flex gap-4 rounded-full shadow-lg bg-white/20 backdrop-blur-md backdrop-saturate-150 border border-white/30">
         <NewHabitButton onClick={handleAddNewHabit} />
-        <MoreButton isOpen={isMenuOpen} toggle={() => setIsMenuOpen(open => !open)} />
+        <MoreButton isOpen={isMenuOpen} toggle={toggleOverflowMenu} />
       </div>
       {isNewHabitOpen && (
         <div
