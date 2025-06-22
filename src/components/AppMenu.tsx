@@ -4,7 +4,6 @@ import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
 import useClickOutside from '../hooks/useClickOutside';
 
-
 interface AppMenuProps {
   setSelectedHabitId: (id: number | null) => void;
 }
@@ -59,8 +58,12 @@ const MoreButton: React.FC<MoreButtonProps> = ({ isOpen, toggle }) => (
 );
 
 const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
-  const { store: habits, setStore: setHabits } = useHabits();
+  const { store: habits, addNewHabits, setStore } = useHabits();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNewHabitOpen, setIsNewHabitOpen] = useState(false);
+  const newHabitRef = useRef<HTMLDivElement>(null);
+  useClickOutside(newHabitRef, () => setIsNewHabitOpen(false), { active: isNewHabitOpen });
+  const [newHabitName, setNewHabitName] = useState('');
   const closeMenu = () => setIsMenuOpen(false);
   const menuRef = useRef<HTMLDivElement>(null);
   useClickOutside(menuRef, closeMenu, { active: isMenuOpen });
@@ -70,7 +73,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const handleClearData = () => {
     if (confirm('Clear all habit data? This cannot be undone.')) {
       localStorage.removeItem('habits');
-      setHabits({ active: [], inactive: [] });
+      setStore({ active: [], inactive: [] });
       setSelectedHabitId(null);
       closeMenu();
     }
@@ -98,7 +101,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       try {
         const importedHabits = await importHabitsFromFile(file);
         if (confirm('Import this data? This will replace your current habits.')) {
-          setHabits(importedHabits);
+          setStore(importedHabits);
           setSelectedHabitId(null);
           closeMenu();
         }
@@ -110,18 +113,52 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
     input.click();
   };
 
-  function handleAddNewHabit(): void {
-    throw new Error('Function not implemented.');
-  }
+  const handleAddNewHabit = () => {
+    setIsNewHabitOpen(true);
+  };
+
+  const handleSaveNewHabit = () => {
+    const name = newHabitName.trim();
+    if (!name) {
+      alert('Please enter a habit name.');
+      return;
+    }
+    const newHabit = {
+      id: Date.now(),
+      name,
+      icon: '📅',
+      priority: habits.active.length + 1,
+    } as const;
+    addNewHabits([newHabit]);
+    setSelectedHabitId(newHabit.id);
+    setNewHabitName('');
+    setIsNewHabitOpen(false);
+  };
 
   return (
     <div className="absolute top-0 right-0 z-50" ref={menuRef}>
       <div className="flex gap-4 rounded-full shadow-lg bg-white/20 backdrop-blur-md backdrop-saturate-150 border border-white/30">
-        <NewHabitButton />
+        <NewHabitButton onClick={handleAddNewHabit} />
         <MoreButton isOpen={isMenuOpen} toggle={() => setIsMenuOpen(open => !open)} />
       </div>
-      {/* Creating new habit */}
-      
+      {isNewHabitOpen && (
+        <div
+          ref={newHabitRef}
+          className="absolute right-0 mt-2 w-80 py-4 px-6 rounded-xl shadow-lg bg-white/60 backdrop-blur-md backdrop-saturate-150 border border-black/10"
+        >
+          <label className="block text-sm font-medium text-gray-700 mb-2">Develop a new habit?</label>
+          <input
+            type="text"
+            value={newHabitName}
+            onChange={e => setNewHabitName(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') handleSaveNewHabit();
+            }}
+            placeholder="Habit name"
+            className="w-full border rounded-lg p-2 mb-2 focus:outline-none focus:ring-1 focus:ring-yellow-400"
+          />
+        </div>
+      )}
       {/* Dropdown menu attached to bottom of icon */}
       {isMenuOpen && (
         <div className="absolute right-0 mt-2 w-48 p-2 rounded-xl shadow-lg bg-white/60 backdrop-blur-md backdrop-saturate-150 border border-black/10">
