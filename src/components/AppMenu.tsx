@@ -87,19 +87,25 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
 
   return (
     <div className="absolute top-0 right-0 z-50" ref={menuRef}>
-      {/* Icon button */}
-      <button
-        onClick={() => setIsMenuOpen(open => !open)}
-        className="p-2 rounded-full shadow-lg transition bg-white/20 hover:bg-yellow-400 hover:text-white backdrop-blur-md backdrop-saturate-150 border border-white/30"
-      >
-        <MoreHorizontal size={20} />
-      </button>
-
+      <div className="flex gap-4 rounded-full shadow-lg bg-white/20 backdrop-blur-md backdrop-saturate-150 border border-white/30">
+        <button
+          className="p-2 rounded-full transition  hover:bg-yellow-400 hover:text-white"
+        >
+          <Plus size={20} />
+        </button>
+        {/* Icon button */}
+        <button
+          onClick={() => setIsMenuOpen(open => !open)}
+          className="p-2 rounded-full transition hover:bg-yellow-400 hover:text-white"
+        >
+          <MoreHorizontal size={20} />
+        </button>
+      </div>
+      {/* Creating new habit */}
+      
       {/* Dropdown menu attached to bottom of icon */}
       {isMenuOpen && (
         <div className="absolute right-0 mt-2 w-48 p-2 rounded-xl shadow-lg bg-white/60 backdrop-blur-md backdrop-saturate-150 border border-black/10">
-          <MenuItem label="Add a habit" icon={Plus} onClick={handleAddNewHabit} />
-          <MenuDivider />
           <MenuItem label="Backup data" icon={Laptop} onClick={handleExportData} />
           <MenuItem label="Restore data" icon={RefreshCcwDot} onClick={handleImportData} />
           <MenuDivider />
