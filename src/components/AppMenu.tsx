@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Menu as MenuIcon, Trash2, Laptop, type LucideIcon, Plus, RefreshCcwDot } from 'lucide-react';
+import { Trash2, Laptop, type LucideIcon, Plus, RefreshCcwDot, MoreHorizontal } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
 import useClickOutside from '../hooks/useClickOutside';
@@ -92,7 +92,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
         onClick={() => setIsMenuOpen(open => !open)}
         className="p-2 rounded-full shadow-lg transition bg-white/20 hover:bg-yellow-400 hover:text-white backdrop-blur-md backdrop-saturate-150 border border-white/30"
       >
-        <MenuIcon size={20} />
+        <MoreHorizontal size={20} />
       </button>
 
       {/* Dropdown menu attached to bottom of icon */}
