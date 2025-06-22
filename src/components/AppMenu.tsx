@@ -144,7 +144,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       {isNewHabitOpen && (
         <div
           ref={newHabitRef}
-          className="absolute right-0 mt-2 w-80 py-4 px-6 rounded-xl shadow-lg bg-white/60 backdrop-blur-md backdrop-saturate-150 border border-black/10"
+          className="absolute right-0 mt-2 w-80 py-4 px-6 rounded-xl shadow-lg bg-white/80 backdrop-blur-md backdrop-saturate-150 border border-black/10"
         >
           <label className="block text-sm font-medium text-gray-700 mb-2">Develop a new habit?</label>
           <input
@@ -161,7 +161,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       )}
       {/* Dropdown menu attached to bottom of icon */}
       {isMenuOpen && (
-        <div className="absolute right-0 mt-2 w-48 p-2 rounded-xl shadow-lg bg-white/60 backdrop-blur-md backdrop-saturate-150 border border-black/10">
+        <div className="absolute right-0 mt-2 w-48 p-2 rounded-xl shadow-lg bg-white/80 backdrop-blur-md backdrop-saturate-150 border border-black/10">
           <MenuItem label="Backup data" icon={Laptop} onClick={handleExportData} />
           <MenuItem label="Restore data" icon={RefreshCcwDot} onClick={handleImportData} />
           <MenuDivider />
