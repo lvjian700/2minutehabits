@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Trash2, Laptop, type LucideIcon, Plus, RefreshCcwDot, MoreHorizontal } from 'lucide-react';
+import { Trash2, Laptop, type LucideIcon, RefreshCcwDot, Plus, MoreHorizontal } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
 import useClickOutside from '../hooks/useClickOutside';
@@ -27,6 +27,35 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, icon: Icon, onClick }) => (
 
 const MenuDivider: React.FC = () => (
   <div className="h-px mx-3 my-2 bg-gray-200" />
+);
+
+// New habit floating action button
+interface NewHabitButtonProps {
+  onClick?: () => void;
+}
+const NewHabitButton: React.FC<NewHabitButtonProps> = ({ onClick }) => (
+  <button
+    onClick={onClick}
+    className="p-2 rounded-full transition  hover:bg-yellow-400 hover:text-white"
+  >
+    <Plus size={20} />
+  </button>
+);
+
+// More / overflow menu button
+interface MoreButtonProps {
+  isOpen: boolean;
+  toggle: () => void;
+}
+const MoreButton: React.FC<MoreButtonProps> = ({ isOpen, toggle }) => (
+  <button
+    onClick={toggle}
+    className="p-2 rounded-full transition hover:bg-yellow-400 hover:text-white"
+    aria-expanded={isOpen}
+    aria-label="More options"
+  >
+    <MoreHorizontal size={20} />
+  </button>
 );
 
 const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
@@ -88,18 +117,8 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   return (
     <div className="absolute top-0 right-0 z-50" ref={menuRef}>
       <div className="flex gap-4 rounded-full shadow-lg bg-white/20 backdrop-blur-md backdrop-saturate-150 border border-white/30">
-        <button
-          className="p-2 rounded-full transition  hover:bg-yellow-400 hover:text-white"
-        >
-          <Plus size={20} />
-        </button>
-        {/* Icon button */}
-        <button
-          onClick={() => setIsMenuOpen(open => !open)}
-          className="p-2 rounded-full transition hover:bg-yellow-400 hover:text-white"
-        >
-          <MoreHorizontal size={20} />
-        </button>
+        <NewHabitButton />
+        <MoreButton isOpen={isMenuOpen} toggle={() => setIsMenuOpen(open => !open)} />
       </div>
       {/* Creating new habit */}
       
