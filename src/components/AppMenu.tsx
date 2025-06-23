@@ -121,6 +121,8 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
     input.click();
   };
 
+  const closeNewHabitPopup = () => setIsNewHabitOpen(false);
+  
   const handleAddNewHabit = () => {
     setIsNewHabitOpen(open => !open);
     setIsMenuOpen(false);
@@ -161,7 +163,16 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
             value={newHabitName}
             onChange={e => setNewHabitName(e.target.value)}
             onKeyDown={e => {
-              if (e.key === 'Enter') handleSaveNewHabit();
+              switch (e.key) {
+                case 'Enter':
+                  handleSaveNewHabit();
+                  break;
+                case 'Escape':
+                  closeNewHabitPopup();
+                  break;
+                default:
+                  break;
+              }
             }}
             placeholder="Habit name"
             className="w-full border rounded-lg p-2 mb-2 focus:outline-none focus:ring-1 focus:ring-yellow-400"
