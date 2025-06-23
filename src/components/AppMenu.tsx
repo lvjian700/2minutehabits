@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Trash2, Laptop, type LucideIcon, RefreshCcwDot, Plus, MoreHorizontal } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
+import type { Habit } from '../types/Habit';
 import useHabits from '../hooks/useHabits';
 import useClickOutside from '../hooks/useClickOutside';
 
 interface AppMenuProps {
   setSelectedHabitId: (id: number | null) => void;
+  addNewHabits: (newHabits: Omit<Habit, 'logs'>[]) => void;
+  activeHabitsCount: number;
 }
 
 interface MenuItemProps {
@@ -57,8 +60,8 @@ const MoreButton: React.FC<MoreButtonProps> = ({ isOpen, toggle }) => (
   </button>
 );
 
-const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
-  const { store: habits, addNewHabits, setStore } = useHabits();
+const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId, addNewHabits, activeHabitsCount }) => {
+  const { store: habits, setStore } = useHabits();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNewHabitOpen, setIsNewHabitOpen] = useState(false);
   const newHabitRef = useRef<HTMLDivElement>(null);
@@ -151,10 +154,10 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       id: Date.now(),
       name,
       icon: '📅',
-      priority: habits.active.length + 1,
+      priority: activeHabitsCount + 1,
     } as const;
+
     addNewHabits([newHabit]);
-    setSelectedHabitId(newHabit.id);
     closeNewHabitPopup();
   };
 
