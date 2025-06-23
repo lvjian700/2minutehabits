@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Trash2, Laptop, type LucideIcon, RefreshCcwDot, Plus, MoreHorizontal } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
@@ -64,6 +64,16 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const newHabitRef = useRef<HTMLDivElement>(null);
   useClickOutside(newHabitRef, () => setIsNewHabitOpen(false), { active: isNewHabitOpen });
   const [newHabitName, setNewHabitName] = useState('');
+  const newHabitInputRef = useRef<HTMLInputElement>(null);
+
+  // Autofocus the input when popup becomes visible
+  useEffect(() => {
+    if (isNewHabitOpen) {
+      // Ensure DOM is updated before focusing
+      newHabitInputRef.current?.focus();
+    }
+  }, [isNewHabitOpen]);
+
   const closeMenu = () => setIsMenuOpen(false);
 
   const toggleOverflowMenu = () => {
@@ -121,7 +131,10 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
     input.click();
   };
 
-  const closeNewHabitPopup = () => setIsNewHabitOpen(false);
+  const closeNewHabitPopup = () => {
+    setIsNewHabitOpen(false);
+    setNewHabitName('');
+  }
   
   const handleAddNewHabit = () => {
     setIsNewHabitOpen(open => !open);
@@ -142,8 +155,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
     } as const;
     addNewHabits([newHabit]);
     setSelectedHabitId(newHabit.id);
-    setNewHabitName('');
-    setIsNewHabitOpen(false);
+    closeNewHabitPopup();
   };
 
   return (
@@ -159,6 +171,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
         >
           <label className="block text-sm font-medium text-gray-700 mb-2">Develop a new habit?</label>
           <input
+            ref={newHabitInputRef}
             type="text"
             value={newHabitName}
             onChange={e => setNewHabitName(e.target.value)}
@@ -174,7 +187,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
                   break;
               }
             }}
-            placeholder="Habit name"
+            placeholder="Give your habit a name"
             className="w-full border rounded-lg p-2 mb-2 focus:outline-none focus:ring-1 focus:ring-yellow-400"
           />
         </div>
