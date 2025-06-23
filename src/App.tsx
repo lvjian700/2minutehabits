@@ -25,6 +25,8 @@ const App: React.FC = () => {
   useVisibilityRefresh();
 
   const {
+    store,
+    setStore,
     habits,
     activeHabits,
     archivedHabits,
@@ -42,13 +44,15 @@ const App: React.FC = () => {
       <div className="min-h-screen p-4">
       <div className="relative max-w-4xl mx-auto">
       <h1 className="text-title-lg mb-6 text-color-title text-center">2-Minute Habits</h1>
-      {habits.length > 0 && (
-        <AppMenu 
-          setSelectedHabitId={setSelectedHabitId}
-          addNewHabits={addNewHabits}
-          activeHabitsCount={activeHabits.length}
-        />
-      )}
+        {habits.length > 0 && (
+          <AppMenu
+            setSelectedHabitId={setSelectedHabitId}
+            addNewHabits={addNewHabits}
+            activeHabitsCount={activeHabits.length}
+            habits={store}
+            setStore={setStore}
+          />
+        )}
       </div>
       {habits.length === 0 && (
         <SetupModal

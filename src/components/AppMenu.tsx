@@ -1,14 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Trash2, Laptop, type LucideIcon, RefreshCcwDot, Plus, MoreHorizontal } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
-import type { Habit } from '../types/Habit';
-import useHabits from '../hooks/useHabits';
+import type { Habit, HabitStore } from '../types/Habit';
+// State is passed in from the parent component to avoid creating a second habit store
+// so we no longer import and call the useHabits hook here
 import useClickOutside from '../hooks/useClickOutside';
 
 interface AppMenuProps {
   setSelectedHabitId: (id: number | null) => void;
   addNewHabits: (newHabits: Omit<Habit, 'logs'>[]) => void;
   activeHabitsCount: number;
+  habits: HabitStore;
+  setStore: React.Dispatch<React.SetStateAction<HabitStore>>;
 }
 
 interface MenuItemProps {
@@ -60,8 +63,13 @@ const MoreButton: React.FC<MoreButtonProps> = ({ isOpen, toggle }) => (
   </button>
 );
 
-const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId, addNewHabits, activeHabitsCount }) => {
-  const { store: habits, setStore } = useHabits();
+const AppMenu: React.FC<AppMenuProps> = ({
+  setSelectedHabitId,
+  addNewHabits,
+  activeHabitsCount,
+  habits,
+  setStore,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNewHabitOpen, setIsNewHabitOpen] = useState(false);
   const newHabitRef = useRef<HTMLDivElement>(null);
