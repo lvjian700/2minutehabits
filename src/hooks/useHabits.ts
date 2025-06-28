@@ -1,6 +1,13 @@
-import { useMemo } from 'react';
 import type { Habit, HabitStore } from '../types/Habit';
 import useLocalStorage from './useLocalStorage';
+
+// Hardcoded habits that will be initialized on first launch
+const DEFAULT_HABITS: Omit<Habit, 'logs'>[] = [
+  { id: 1, name: 'Fitness', icon: '🏋️', priority: 1 },
+  { id: 2, name: 'Meditation', icon: '🧘', priority: 2 },
+  { id: 3, name: 'Wind Down for Sleep', icon: '🌙', priority: 3 },
+  { id: 4, name: 'No Sugar', icon: '🍭', priority: 4 }
+];
 
 export function setActiveHabitsInStore(
   prev: HabitStore,
@@ -51,13 +58,7 @@ export function toggleLogInStore(
   };
 }
 
-// Hardcoded habits that will be initialized on first launch
-const DEFAULT_HABITS: Omit<Habit, 'logs'>[] = [
-  { id: 1, name: 'Fitness', icon: '🏋️', priority: 1 },
-  { id: 2, name: 'Meditation', icon: '🧘', priority: 2 },
-  { id: 3, name: 'Wind Down for Sleep', icon: '🌙', priority: 3 },
-  { id: 4, name: 'No Sugar', icon: '🍭', priority: 4 }
-];
+
 
 export default function useHabits() {
   const [store, setStore] = useLocalStorage<HabitStore>('habits', {
