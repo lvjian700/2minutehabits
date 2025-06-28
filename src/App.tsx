@@ -14,11 +14,8 @@ const App: React.FC = () => {
   const {
     habits,
     activeHabits,
-    archivedHabits,
     setActiveHabits,
     updateHabit,
-    archiveHabit,
-    resumeHabit,
     toggleLog,
   } = useHabits();
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
@@ -70,38 +67,11 @@ const App: React.FC = () => {
                 }
                 onClose={() => setSelectedHabitId(null)}
                 onEditHabit={updateHabit}
-                onArchive={archiveHabit}
               />
             )}
           </Modal>
       </div>
-      {archivedHabits.length > 0 && (
-        <div className="relative max-w-4xl mx-auto mt-8">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">Archived Habits</h2>
-          <div className="space-y-3">
-            {archivedHabits.map(h => {
-              const completedDays = h.logs ? Object.values(h.logs).filter(Boolean).length : 0;
-              return (
-                <div key={h.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-3xl">{h.icon}</span>
-                    <div>
-                      <p className="font-medium text-gray-800">{h.name}</p>
-                      <p className="text-sm text-gray-600">Completed Days: {completedDays}</p>
-                    </div>
-                  </div>
-                  <button
-                    className="px-3 py-1.5 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                    onClick={() => resumeHabit(h.id)}
-                  >
-                    Resume
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+
       </div>
     </>
   );

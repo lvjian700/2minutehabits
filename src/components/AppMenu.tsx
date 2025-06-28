@@ -41,7 +41,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const handleClearData = () => {
     if (confirm('Clear all habit data? This cannot be undone.')) {
       localStorage.removeItem('habits');
-      setHabits({ active: [], inactive: [] });
+      setHabits({ active: [] });
       setSelectedHabitId(null);
       closeMenu();
     }

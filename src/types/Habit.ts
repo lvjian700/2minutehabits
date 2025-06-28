@@ -4,16 +4,12 @@ export interface Habit {
   icon: string;
   priority: number;
   logs: Record<string, boolean>;
-  /** Indicates if the habit is archived (no longer shown in active list). */
-  archived?: boolean;
 }
 
 /**
- * Wrapper object stored in localStorage under the key `habits` after v0.1.
- * Keeps active and inactive (archived) habits separate while preserving legacy
- * array-only compatibility.
+ * Wrapper object stored in localStorage under the key `habits`.
+ * Stores the list of active habits.
  */
 export interface HabitStore {
   active: Habit[];
-  inactive: Habit[];
 }
