@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Menu as MenuIcon, Trash2, Laptop, type LucideIcon, Plus, RefreshCcwDot } from 'lucide-react';
+import { Menu as MenuIcon, Trash2, Laptop, type LucideIcon, RefreshCcwDot } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
 import useHabits from '../hooks/useHabits';
 import useClickOutside from '../hooks/useClickOutside';
@@ -81,10 +81,6 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
     input.click();
   };
 
-  function handleAddNewHabit(): void {
-    throw new Error('Function not implemented.');
-  }
-
   return (
     <div className="absolute top-0 right-0 z-50" ref={menuRef}>
       {/* Icon button */}
@@ -98,8 +94,6 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       {/* Dropdown menu attached to bottom of icon */}
       {isMenuOpen && (
         <div className="absolute right-0 mt-2 w-48 p-2 rounded-xl shadow-lg bg-white/60 backdrop-blur-md backdrop-saturate-150 border border-black/10">
-          <MenuItem label="Add a habit" icon={Plus} onClick={handleAddNewHabit} />
-          <MenuDivider />
           <MenuItem label="Backup data" icon={Laptop} onClick={handleExportData} />
           <MenuItem label="Restore data" icon={RefreshCcwDot} onClick={handleImportData} />
           <MenuDivider />

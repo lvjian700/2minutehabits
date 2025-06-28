@@ -23,17 +23,6 @@ export function setActiveHabitsInStore(
   };
 }
 
-export function addNewHabitsToStore(
-  prev: HabitStore,
-  newHabits: Omit<Habit, 'logs'>[]
-): HabitStore {
-  const formatted = newHabits.map(h => ({ ...h, logs: {} }));
-  return {
-    active: [...prev.active, ...formatted],
-    inactive: prev.inactive
-  };
-}
-
 export function updateHabitInStore(
   prev: HabitStore,
   habitId: number,
@@ -87,9 +76,17 @@ export function toggleLogInStore(
   };
 }
 
+// Hardcoded habits that will be initialized on first launch
+const DEFAULT_HABITS: Omit<Habit, 'logs'>[] = [
+  { id: 1, name: 'Fitness', icon: '🏋️', priority: 1, archived: false },
+  { id: 2, name: 'Meditation', icon: '🧘', priority: 2, archived: false },
+  { id: 3, name: 'Wind Down for Sleep', icon: '🌙', priority: 3, archived: false },
+  { id: 4, name: 'No Sugar', icon: '🍭', priority: 4, archived: false }
+];
+
 export default function useHabits() {
   const [store, setStore] = useLocalStorage<HabitStore>('habits', {
-    active: [],
+    active: DEFAULT_HABITS.map(h => ({ ...h, logs: {} })),
     inactive: []
   });
 
@@ -97,14 +94,8 @@ export default function useHabits() {
   const activeHabits = store.active;
   const archivedHabits = store.inactive;
 
-  const setActiveHabits = (
-    next: Habit[] | ((prevActive: Habit[]) => Habit[])
-  ) => {
+  const setActiveHabits = (next: Habit[] | ((prevActive: Habit[]) => Habit[])) => {
     setStore(prev => setActiveHabitsInStore(prev, next));
-  };
-
-  const addNewHabits = (newHabits: Omit<Habit, 'logs'>[]) => {
-    setStore(prev => addNewHabitsToStore(prev, newHabits));
   };
 
   const updateHabit = (habitId: number, updates: Partial<Habit>) => {
@@ -130,7 +121,6 @@ export default function useHabits() {
     activeHabits,
     archivedHabits,
     setActiveHabits,
-    addNewHabits,
     updateHabit,
     archiveHabit,
     resumeHabit,

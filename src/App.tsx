@@ -2,23 +2,10 @@ import React, { useState } from 'react';
 import { getLocalDateString } from './utils/date';
 import HabitsDndGrid from './components/HabitsDndGrid';
 import useHabits from './hooks/useHabits';
-import SetupModal from './components/SetupModal';
 import HabitDetailsView from './components/HabitDetailsView';
 import Modal from './components/Modal';
 import AppMenu from './components/AppMenu';
 import { useVisibilityRefresh } from './hooks/useDateRefresh';
-
-// Predefined habit suggestions for onboarding (single-emoji icons)
-const SUGGESTIONS = [
-  { name: 'Fitness', icon: '🏋️' },
-  { name: 'Running', icon: '🏃' },
-  { name: 'Meditation', icon: '🧘' },
-  { name: 'Writing', icon: '✍️' },
-  { name: 'Wind Down for Sleep', icon: '🌙' },
-  { name: 'Reading', icon: '📖' },
-  { name: 'No Sugar', icon: '🍭' },
-  { name: 'No Smoking', icon: '🚭' }
-];
 
 const App: React.FC = () => {
   // Use the visibility refresh hook to handle date changes when tab becomes active
@@ -29,7 +16,6 @@ const App: React.FC = () => {
     activeHabits,
     archivedHabits,
     setActiveHabits,
-    addNewHabits,
     updateHabit,
     archiveHabit,
     resumeHabit,
@@ -41,25 +27,13 @@ const App: React.FC = () => {
     <>
       <div className="min-h-screen p-4">
       <div className="relative max-w-4xl mx-auto">
-      <h1 className="text-title-lg mb-6 text-color-title text-center">2-Minute Habits</h1>
-      {habits.length > 0 && (
+        <h1 className="text-title-lg mb-6 text-color-title text-center">2-Minute Habits</h1>
         <AppMenu
           setSelectedHabitId={setSelectedHabitId}
         />
-      )}
-      </div>
-      {habits.length === 0 && (
-        <SetupModal
-          suggestions={SUGGESTIONS}
-          maxSelectable={5}
-          defaultRandomCount={3}
-          onSave={addNewHabits}
-        />
-      )}
-      {habits.length > 0 && (
-        <div className="relative max-w-4xl mx-auto">
-          {/* Grid view of habits */}
-          <HabitsDndGrid
+        
+        {/* Grid view of habits */}
+        <HabitsDndGrid
             habits={activeHabits}
             onReorder={newActive => {
               // Maintain order only within active habits
@@ -100,8 +74,7 @@ const App: React.FC = () => {
               />
             )}
           </Modal>
-        </div>
-      )}
+      </div>
       {archivedHabits.length > 0 && (
         <div className="relative max-w-4xl mx-auto mt-8">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">Archived Habits</h2>
