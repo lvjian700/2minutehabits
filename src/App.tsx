@@ -1,23 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getLocalDateString } from './utils/date';
 import HabitsDndGrid from './components/HabitsDndGrid';
 import useHabits from './hooks/useHabits';
 import HabitDetailsView from './components/HabitDetailsView';
 import Modal from './components/Modal';
 import AppMenu from './components/AppMenu';
-import { useVisibilityRefresh } from './hooks/useDateRefresh';
+import { useBoot } from './hooks/useBoot';
 
 const App: React.FC = () => {
-  // Use the visibility refresh hook to handle date changes when tab becomes active
-  useVisibilityRefresh();
-
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload();
-      });
-    }
-  }, []);
+  // Handle app initialization, service worker updates, and date refresh
+  useBoot();
 
   const {
     habits,

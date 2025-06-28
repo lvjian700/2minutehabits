@@ -2,14 +2,22 @@ import { useState, useEffect } from 'react';
 import { getLocalDateString } from '../utils/date';
 
 /**
- * Hook that refreshes the app when it becomes visible again after being hidden.
- * This handles cases like returning to the app after it's been in the background overnight.
+ * Hook to handle app initialization, service worker updates, and date refresh
  */
-export function useVisibilityRefresh(): void {
+export const useBoot = () => {
   const [lastDate, setLastDate] = useState(getLocalDateString());
 
+  // Handle service worker updates
   useEffect(() => {
-    // Function to check if date has changed and refresh if needed
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+    }
+  }, []);
+
+  // Handle visibility refresh when date changes
+  useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         const currentDate = getLocalDateString();
@@ -29,4 +37,4 @@ export function useVisibilityRefresh(): void {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [lastDate]);
-}
+};
