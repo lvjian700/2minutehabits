@@ -2,7 +2,7 @@ import { getLocalDateString } from './date';
 import type { HabitStore } from '../types/Habit';
 
 // Current app version constant can be re-exported for reuse
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.2.0';
 
 /**
  * Trigger download of the user's habit data as a JSON backup file.
@@ -19,7 +19,7 @@ export function exportHabitsToFile(habits: HabitStore, version: string = APP_VER
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `2-minutes-habits-backup-${getLocalDateString()}.json`;
+  a.download = `2-minutes-habits-backup-${getLocalDateString()}-${version}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
