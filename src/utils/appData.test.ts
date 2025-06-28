@@ -13,7 +13,6 @@ const sampleHabits: HabitStore = {
       logs: {},
     },
   ],
-  inactive: [],
 };
 
 describe('exportHabitsToFile', () => {

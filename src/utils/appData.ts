@@ -12,7 +12,6 @@ export function exportHabitsToFile(habits: HabitStore, version: string = APP_VER
     version,
     habits: {
       active: habits.active,
-      inactive: habits.inactive,
     },
   };
   const data = JSON.stringify(exportData, null, 2);
@@ -40,8 +39,7 @@ export async function importHabitsFromFile(
 
   if (
     importedData.version === expectedVersion &&
-    importedData.habits?.active &&
-    importedData.habits?.inactive
+    importedData.habits?.active
   ) {
     return importedData.habits as HabitStore;
   }
