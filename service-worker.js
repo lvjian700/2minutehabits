@@ -1,5 +1,5 @@
 // Simple service worker for PWA
-const CACHE_NAME = 'ivotes-cache-v3';
+const CACHE_NAME = '2-minutes-habits-cache-v4';
 
 // Determine the base path based on where the service worker is located
 const scope = self.registration.scope;
