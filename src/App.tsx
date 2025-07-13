@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { getLocalDateString } from './utils/date';
 import HabitsDndGrid from './components/HabitsDndGrid';
-import useHabits from './hooks/useHabits';
+import { useHabitsContext } from './context/HabitsContext';
 import HabitDetailsView from './components/HabitDetailsView';
 import Modal from './components/Modal';
 import AppMenu from './components/AppMenu';
@@ -15,9 +15,8 @@ const App: React.FC = () => {
     habits,
     activeHabits,
     setActiveHabits,
-    updateHabit,
     toggleLog,
-  } = useHabits();
+  } = useHabitsContext();
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
 
   return (
@@ -59,17 +58,13 @@ const App: React.FC = () => {
               onClose={() => setSelectedHabitId(null)}
               aria-label="Habit details"
             >
-              {selectedHabitId !== null && (
-                <HabitDetailsView
-                  habit={habits.find(h => h.id === selectedHabitId)!}
-                  onToggle={date =>
-                    toggleLog(selectedHabitId, date)
-                  }
-                  onClose={() => setSelectedHabitId(null)}
-                  onEditHabit={updateHabit}
-                />
-              )}
-            </Modal>
+                {selectedHabitId !== null && (
+                  <HabitDetailsView
+                    habitId={selectedHabitId}
+                    onClose={() => setSelectedHabitId(null)}
+                  />
+                )}
+              </Modal>
         </div>
 
       </div>

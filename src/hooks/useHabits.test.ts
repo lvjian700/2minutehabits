@@ -3,8 +3,8 @@ import type { HabitStore, Habit } from '../types/Habit';
 import {
   setActiveHabitsInStore,
   updateHabitInStore,
-  toggleLogInStore
-} from './useHabits';
+  toggleLogInStore,
+} from '../context/habitStore';
 
 describe('useHabits store helpers', () => {
   describe('setActiveHabitsInStore', () => {
