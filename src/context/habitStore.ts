@@ -5,7 +5,7 @@ export const DEFAULT_HABITS: Omit<Habit, "logs">[] = [
   { id: 1, name: "Fitness", icon: "🏋️", priority: 1 },
   { id: 2, name: "Meditation", icon: "🧘", priority: 2 },
   { id: 3, name: "Wind Down for Sleep", icon: "🌙", priority: 3 },
-  { id: 4, name: "No Sugar Drinks", icon: "🍵", priority: 4 },
+  { id: 4, name: "No Sugar Drinks", icon: "🥤", priority: 4 },
 ];
 
 export function setActiveHabitsInStore(
