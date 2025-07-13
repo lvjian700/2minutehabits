@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import useClickOutside from "../hooks/useClickOutside";
 
-import type { Habit } from "../types/Habit";
-import { MoreHorizontal, X } from "lucide-react";
+import { X } from "lucide-react";
 import CalendarView from "./CalendarView";
 import EditableText from "./EditableText";
 import EmojiPickerPopover from "./EmojiPickerPopover";
