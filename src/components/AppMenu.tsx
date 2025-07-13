@@ -9,10 +9,10 @@ import {
 import { exportHabitsToFile, importHabitsFromFile } from "../utils/appData";
 import { useHabitsContext } from "../context/HabitsContext";
 import useClickOutside from "../hooks/useClickOutside";
-import Modal from "./Modal";
 
 interface AppMenuProps {
   setSelectedHabitId: (id: number | null) => void;
+  onAboutClick: () => void;
 }
 
 interface MenuItemProps {
@@ -35,7 +35,10 @@ const MenuDivider: React.FC = () => (
   <div className="h-px mx-3 my-2 bg-gray-200" />
 );
 
-const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
+const AppMenu: React.FC<AppMenuProps> = ({
+  setSelectedHabitId,
+  onAboutClick,
+}) => {
   const { store: habits, replaceStore } = useHabitsContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
@@ -43,7 +46,10 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   useClickOutside(menuRef, closeMenu, { active: isMenuOpen });
 
   // Clear all habit data
-  const handleAbout = () => console.log("show about");
+  const handleAboutClick = () => {
+    onAboutClick();
+    closeMenu();
+  };
 
   // Export data as JSON file
   const handleExportData = () => {
@@ -105,7 +111,11 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
             onClick={handleImportData}
           />
           <MenuDivider />
-          <MenuItem label="About the App" icon={Apple} onClick={handleAbout} />
+          <MenuItem
+            label="About the App"
+            icon={Apple}
+            onClick={handleAboutClick}
+          />
         </div>
       )}
     </div>
