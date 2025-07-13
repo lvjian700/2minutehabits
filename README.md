@@ -10,7 +10,7 @@ https://lvjian700.github.io/ihahits
 
 ## Features
 
-- Select up to 5 habits from a preset list or randomize your choice
+- Track 4 core habits
 - Track daily completion with current and maximum streaks
 - View and backfill habit history in a monthly calendar
 - Fully client‑side, data stored in localStorage
