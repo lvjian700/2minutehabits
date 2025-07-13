@@ -19,13 +19,13 @@ const App: React.FC = () => {
           <AppMenu
             setSelectedHabitId={setSelectedHabitId}
           />
-          
+
           {/* Grid view of habits */}
           <HabitsDndGrid onSelect={setSelectedHabitId} />
-            
+
             {/* Modal with habit details */}
-            <Modal 
-              isOpen={selectedHabitId !== null} 
+            <Modal
+              isOpen={selectedHabitId !== null}
               onClose={() => setSelectedHabitId(null)}
               aria-label="Habit details"
             >
