@@ -7,10 +7,13 @@ const About: React.FC = () => {
         About 2-Minute Habits
       </h1>
       <p className="text-lg mb-6">
-        Inspired by James Clear's <em>Atomic Habits</em>, "Every action you take
-        is a vote for the type of person you wish to become." Whether you're
-        aiming to become fitter, calmer, good-sleeper, or more mindful of your
-        diet — this app helps you cast those daily votes.
+        Inspired by James Clear's <em>Atomic Habits</em>,{" "}
+        <b>
+          "Every action you take is a vote for the type of person you wish to
+          become."
+        </b>{" "}
+        Whether you're aiming to become fitter, calmer, good-sleeper, or more
+        mindful of your diet — this app helps you cast those daily votes.
       </p>
 
       <h2 className="text-2xl font-semibold text-blue-800 mb-4">
@@ -35,8 +38,8 @@ const About: React.FC = () => {
           </ul>
         </li>
         <li>
-          Ask yourself a good question: "Can I spend 2 minutes on this habit
-          today?"
+          Ask yourself the question: "Can I spend 2 minutes on this habit today,
+          just 2 minutes?"
         </li>
         <li>
           Tap <em>Mark Complete</em> each day you follow through.
@@ -48,7 +51,7 @@ const About: React.FC = () => {
       </ul>
 
       <h2 className="text-2xl font-semibold text-blue-800 mb-4">
-        📨 Contact the Author
+        📨 Contact Me
       </h2>
       <p className="text-lg">
         Have feedback, ideas, or just want to say hi? Reach out to the creator
