@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import useClickOutside from "../hooks/useClickOutside";
 
 import type { Habit } from "../types/Habit";
@@ -7,23 +7,26 @@ import CalendarView from "./CalendarView";
 import EditableText from "./EditableText";
 import EmojiPickerPopover from "./EmojiPickerPopover";
 import type { EmojiData } from "../types/EmojiData";
+import { useHabitsContext } from "../context/HabitsContext";
 
 interface HabitDetailsViewProps {
-  habit: Habit;
-  onToggle: (date: string) => void;
+  habitId: number;
   onClose: () => void;
-  onEditHabit: (habitId: number, updates: Partial<Habit>) => void;
 }
 
 const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({
-  habit,
-  onToggle,
+  habitId,
   onClose,
-  onEditHabit,
 }) => {
+  const { habits, updateHabit, toggleLog } = useHabitsContext();
+  const habit = habits.find((h) => h.id === habitId)!;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [editingIcon, setEditingIcon] = useState(false);
   const [habitIcon, setHabitIcon] = useState(habit.icon || "🏆");
+
+  useEffect(() => {
+    setHabitIcon(habit.icon || "🏆");
+  }, [habit.icon]);
 
   const emojiIconRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +39,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({
   const handleSelectEmoji = (emojiData: EmojiData) => {
     setHabitIcon(emojiData.native);
     setEditingIcon(false);
-    if (onEditHabit) onEditHabit(habit.id, { icon: emojiData.native });
+    updateHabit(habit.id, { icon: emojiData.native });
   };
 
   return (
@@ -55,9 +58,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({
             <EditableText
               initialValue={habit.name}
               onSave={(newName) => {
-                if (onEditHabit) {
-                  onEditHabit(habit.id, { name: newName });
-                }
+                updateHabit(habit.id, { name: newName });
               }}
               textElement="h2"
               textClassName="text-2xl font-bold text-gray-800 cursor-pointer"
@@ -89,7 +90,10 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({
       />
 
       {/* Calendar Component */}
-      <CalendarView habit={habit} onToggle={onToggle} />
+      <CalendarView
+        habit={habit}
+        onToggle={(date) => toggleLog(habit.id, date)}
+      />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Menu as MenuIcon, Trash2, Laptop, type LucideIcon, RefreshCcwDot } from 'lucide-react';
 import { exportHabitsToFile, importHabitsFromFile } from '../utils/appData';
-import useHabits from '../hooks/useHabits';
+import { useHabitsContext } from '../context/HabitsContext';
 import useClickOutside from '../hooks/useClickOutside';
 
 
@@ -30,7 +30,7 @@ const MenuDivider: React.FC = () => (
 );
 
 const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
-  const { store: habits, setStore: setHabits } = useHabits();
+  const { store: habits, replaceStore } = useHabitsContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -41,7 +41,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
   const handleClearData = () => {
     if (confirm('Clear all habit data? This cannot be undone.')) {
       localStorage.removeItem('habits');
-      setHabits({ active: [] });
+      replaceStore({ active: [] });
       setSelectedHabitId(null);
       closeMenu();
     }
@@ -69,7 +69,7 @@ const AppMenu: React.FC<AppMenuProps> = ({ setSelectedHabitId }) => {
       try {
         const importedHabits = await importHabitsFromFile(file);
         if (confirm('Import this data? This will replace your current habits.')) {
-          setHabits(importedHabits);
+          replaceStore(importedHabits);
           setSelectedHabitId(null);
           closeMenu();
         }
