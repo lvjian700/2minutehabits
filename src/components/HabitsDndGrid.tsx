@@ -3,12 +3,11 @@ import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from 
 import { arrayMove, SortableContext, useSortable, rectSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import HabitCard from './HabitCard';
+import { getLocalDateString } from '../utils/date';
+import { useHabitsContext } from '../context/HabitsContext';
 import type { Habit } from '../types/Habit';
 
 interface HabitsDndGridProps {
-  habits: Habit[];
-  onReorder: (newHabits: Habit[]) => void;
-  onToggle: (habitId: number) => void;
   onSelect: (habitId: number) => void;
 }
 
@@ -50,7 +49,10 @@ function SortableHabitCard({ habit, idx, onToggle, onSelect }: SortableHabitCard
   );
 }
 
-const HabitsDndGrid: React.FC<HabitsDndGridProps> = ({ habits, onReorder, onToggle, onSelect }) => {
+const HabitsDndGrid: React.FC<HabitsDndGridProps> = ({ onSelect }) => {
+  const { activeHabits, setActiveHabits, toggleLog } = useHabitsContext();
+  const habits = activeHabits;
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 1 } })
   );
@@ -60,7 +62,7 @@ const HabitsDndGrid: React.FC<HabitsDndGridProps> = ({ habits, onReorder, onTogg
     if (active.id !== over?.id) {
       const oldIndex = habits.findIndex(h => h.id === active.id);
       const newIndex = habits.findIndex(h => h.id === over.id);
-      onReorder(arrayMove(habits, oldIndex, newIndex));
+      setActiveHabits(arrayMove(habits, oldIndex, newIndex));
     }
   };
 
@@ -74,7 +76,7 @@ const HabitsDndGrid: React.FC<HabitsDndGridProps> = ({ habits, onReorder, onTogg
               key={habit.id}
               habit={habit}
               idx={idx}
-              onToggle={onToggle}
+              onToggle={(id) => toggleLog(id, getLocalDateString())}
               onSelect={onSelect}
             />
           ))}
