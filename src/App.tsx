@@ -3,6 +3,7 @@ import HabitsDndGrid from "./components/HabitsDndGrid";
 import HabitDetailsView from "./components/HabitDetailsView";
 import Modal from "./components/Modal";
 import AppMenu from "./components/AppMenu";
+import AboutTheApp from "./components/AboutTheApp";
 import { useBoot } from "./hooks/useBoot";
 
 const App: React.FC = () => {
@@ -44,13 +45,7 @@ const App: React.FC = () => {
             onClose={() => setAboutOpen(false)}
             aria-label="Habit details"
           >
-            <div className="p-4">
-              <h2 className="text-title-md mb-4 text-color-title">About</h2>
-              <p className="text-color-text">
-                2-Minute Habits is a simple habit tracking app that helps you
-                build good habits in just two minutes a day.
-              </p>
-            </div>
+            <AboutTheApp />
           </Modal>
         </div>
       </div>
