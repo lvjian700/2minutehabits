@@ -6,7 +6,7 @@ A simple daily habit tracker built with React, TypeScript, Vite, and Tailwind CS
 
 Experience the app at:
 
-https://lvjian700.github.io/2minutehabits
+https://2minutehabits.app
 
 ## Features
 

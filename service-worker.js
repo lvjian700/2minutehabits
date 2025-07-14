@@ -1,10 +1,11 @@
 // Simple service worker for PWA
 const CACHE_NAME = "2-minutes-habits-cache-v5";
 
-// Determine the base path based on where the service worker is located
-const scope = self.registration.scope;
-const isGitHubPages = scope.includes("github.io");
-const BASE_PATH = isGitHubPages ? "/2minutehabits" : "";
+// Determine the base path from the service worker scope so it works on both
+// GitHub Pages and the custom domain. If the scope path is just '/', use an
+// empty string to avoid double slashes.
+const scopePath = new URL(self.registration.scope).pathname;
+const BASE_PATH = scopePath === "/" ? "" : scopePath.replace(/\/$/, "");
 
 // For debugging
 console.log("Service Worker scope:", scope);
