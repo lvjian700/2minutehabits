@@ -28,7 +28,7 @@ function copyServiceWorker() {
 }
 
 export default defineConfig({
-  // Base public path when served from GitHub Pages under /2minutehabits/
-  base: "/2minutehabits/",
+  // Base public path when served from the custom domain
+  base: "/",
   plugins: [react(), copyServiceWorker()],
 });

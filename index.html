@@ -6,10 +6,10 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="2-Minute Habits" />
-    <link rel="icon" href="/icon-192.png" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
-    <link rel="mask-icon" href="/icon-192.png" color="#FCF7EE" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="icon-192.png" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
+    <link rel="mask-icon" href="icon-192.png" color="#FCF7EE" />
+    <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#FCF7EE" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -18,12 +18,11 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
+    <script type="module">
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          // Use the correct base path when deployed to GitHub Pages
-          const basePath = location.hostname === 'localhost' ? '' : '/ihahits';
-          navigator.serviceWorker.register(`${basePath}/service-worker.js`);
+        window.addEventListener('load', () => {
+          const swPath = `${import.meta.env.BASE_URL}service-worker.js`;
+          navigator.serviceWorker.register(swPath);
         });
       }
     </script>

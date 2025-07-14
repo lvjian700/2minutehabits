@@ -2,7 +2,7 @@
   "name": "habit-tracker",
   "version": "0.0.1",
   "private": true,
-  "homepage": "https://lvjian700.github.io/ihahits",
+  "homepage": "https://2minutehabits.app",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
