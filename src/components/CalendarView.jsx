@@ -14,7 +14,7 @@ const CalendarView = ({ habit, onToggle }) => {
     }
     setNavButtonsVisible(true);
   };
-  
+
   const hideNavButtons = () => {
     if (navTimeoutRef.current) {
       window.clearTimeout(navTimeoutRef.current);
@@ -25,7 +25,7 @@ const CalendarView = ({ habit, onToggle }) => {
       navTimeoutRef.current = null;
     }, delay);
   };
-  
+
   // Clean up timeout on unmount
   useEffect(() => {
     return () => {
@@ -81,24 +81,24 @@ const CalendarView = ({ habit, onToggle }) => {
   return (
     <div className="py-2">
       {/* Month navigation */}
-      <div 
+      <div
         className="flex justify-between items-center"
         aria-label="Month navigation"
         onMouseEnter={showNavButtons}
         onMouseLeave={hideNavButtons}
       >
         <button
-          className={`px-3 py-1 text-gray-500 rounded hover:bg-gray-300 transition-opacity duration-300 ${navButtonsVisible ? 'opacity-100' : 'opacity-0'}`}
+          className={`px-3 py-1 text-gray-500 rounded hover:bg-gray-300 transition-opacity duration-300 ${navButtonsVisible ? "opacity-100" : "opacity-0"}`}
           onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
           aria-label="Previous month"
         >
           &lt;
         </button>
         <div className="text-lg font-medium text-gray-800 cursor-default">
-          {currentDate.toLocaleString('default', { month: 'long' })} {year}
+          {currentDate.toLocaleString("default", { month: "long" })} {year}
         </div>
         <button
-          className={`px-3 py-1 text-gray-500 rounded hover:bg-gray-300 transition-opacity duration-300 ${navButtonsVisible ? 'opacity-100' : 'opacity-0'}`}
+          className={`px-3 py-1 text-gray-500 rounded hover:bg-gray-300 transition-opacity duration-300 ${navButtonsVisible ? "opacity-100" : "opacity-0"}`}
           onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
           aria-label="Next month"
         >
