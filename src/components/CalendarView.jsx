@@ -46,31 +46,33 @@ const CalendarView = ({ habit, onToggle }) => {
       cells.push(<div key={day} className="text-center font-medium text-gray-500 py-2">{day}</div>);
     });
     for (let i = 0; i < startDay; i++) {
-      cells.push(<div key={'empty-' + i} />);
+      cells.push(<div key={"empty-" + i} />);
     }
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month, d);
       const dateStr = getLocalDateString(date);
       const completed = habit.logs[dateStr];
       const isToday = dateStr === todayStr;
-      
+
       // Check if date is in the future
       const isFutureDate = date > new Date();
-      
+
       cells.push(
         <div
           key={dateStr}
           onClick={isFutureDate ? undefined : () => onToggle(dateStr)}
           className={`p-2 text-center rounded transition-colors text-sm h-12 flex items-center justify-center
-            ${completed ? 'bg-green-500 text-white' : ''}
-            ${isToday ? 'border-2 border-blue-500' : ''}
-            ${isFutureDate 
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-50' 
-              : 'cursor-pointer hover:bg-gray-100'}`
-          }
+            ${completed ? "bg-green-500 text-white" : "hover:bg-gray-100"}
+            ${isToday ? "border-2 border-blue-500" : ""}
+            ${
+              isFutureDate
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
+                : "cursor-pointer"
+            }
+              `}
         >
           {d}
-        </div>
+        </div>,
       );
     }
     return cells;
