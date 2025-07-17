@@ -37,7 +37,3 @@ self.addEventListener("activate", (event) => {
   );
   self.clients.claim();
 });
-
-self.addEventListener("fetch", (event) => {
-  // Let the browser handle all requests normally (no caching)
-});
