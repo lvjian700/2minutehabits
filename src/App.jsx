@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import HabitsDndGrid from "./components/HabitsDndGrid";
 import HabitDetailsView from "./components/HabitDetailsView";
 import Modal from "./components/Modal";

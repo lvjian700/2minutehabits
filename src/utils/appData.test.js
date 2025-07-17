@@ -1,30 +1,38 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { exportHabitsToFile, importHabitsFromFile, APP_VERSION } from './appData';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import {
+  exportHabitsToFile,
+  importHabitsFromFile,
+  APP_VERSION,
+} from "./appData";
 
 // A minimal stub habit store for testing
 const sampleHabits = {
   active: [
     {
       id: 1,
-      name: 'Test',
-      icon: '🔥',
+      name: "Test",
+      icon: "🔥",
       priority: 1,
       logs: {},
     },
   ],
 };
 
-describe('exportHabitsToFile', () => {
+describe("exportHabitsToFile", () => {
   let createObjectURLSpy;
   let revokeObjectURLSpy;
   let appendChildSpy;
   let removeChildSpy;
 
   beforeEach(() => {
-    createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob://dummy');
-    revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
-    appendChildSpy = vi.spyOn(document.body, 'appendChild');
-    removeChildSpy = vi.spyOn(document.body, 'removeChild');
+    createObjectURLSpy = vi
+      .spyOn(URL, "createObjectURL")
+      .mockReturnValue("blob://dummy");
+    revokeObjectURLSpy = vi
+      .spyOn(URL, "revokeObjectURL")
+      .mockImplementation(() => {});
+    appendChildSpy = vi.spyOn(document.body, "appendChild");
+    removeChildSpy = vi.spyOn(document.body, "removeChild");
   });
 
   afterEach(() => {
@@ -34,18 +42,17 @@ describe('exportHabitsToFile', () => {
     removeChildSpy.mockRestore();
   });
 
-  it('creates a download link and revokes URL', () => {
+  it("creates a download link and revokes URL", () => {
     exportHabitsToFile(sampleHabits, APP_VERSION);
     expect(createObjectURLSpy).toHaveBeenCalled();
     expect(revokeObjectURLSpy).toHaveBeenCalled();
     expect(appendChildSpy).toHaveBeenCalled();
     expect(removeChildSpy).toHaveBeenCalled();
   });
-
 });
 
-describe('importHabitsFromFile', () => {
-  it('returns HabitStore for valid backup', async () => {
+describe("importHabitsFromFile", () => {
+  it("returns HabitStore for valid backup", async () => {
     const data = JSON.stringify({ version: APP_VERSION, habits: sampleHabits });
     // Minimal File mock with required text() method
     const fileMock = { text: () => Promise.resolve(data) };
@@ -54,10 +61,12 @@ describe('importHabitsFromFile', () => {
     expect(imported).toEqual(sampleHabits);
   });
 
-  it('throws on invalid data', async () => {
-    const badData = JSON.stringify({ foo: 'bar' });
+  it("throws on invalid data", async () => {
+    const badData = JSON.stringify({ foo: "bar" });
     const badFileMock = { text: () => Promise.resolve(badData) };
 
-    await expect(importHabitsFromFile(badFileMock, APP_VERSION)).rejects.toThrow();
+    await expect(
+      importHabitsFromFile(badFileMock, APP_VERSION),
+    ).rejects.toThrow();
   });
 });
