@@ -10,20 +10,20 @@ Core goals:
 * Track 4 core daily habits with a single tap
 * Persist data offline in `localStorage` – no backend required
 * Provide an installable, mobile-first experience via Service Worker + Web Manifest
-* Keep the codebase approachable: React, TypeScript, Vite, TailwindCSS only
+* Keep the codebase approachable: React, JavaScript, Vite, TailwindCSS only
 
 ---
 
 ## 2  Tech Stack at a Glance
 | Layer                 | Tooling / Library | Notes |
 | --------------------- | ----------------- | ----- |
-| UI framework          | React 18 + TSX    | Functional components only |
+| UI framework          | React 18 + JSX    | Functional components only |
 | Routing               | *none*            | Single-screen app |
 | State management      | React Context + `useReducer` | Centralized in `src/context` |
 | Drag & Drop           | `@dnd-kit`        | Grid re-ordering of habits |
 | Styling               | TailwindCSS 3     | Configured in `tailwind.config.cjs` |
-| Bundler / Dev server  | Vite              | Config in `vite.config.ts` |
-| Testing               | Vitest + React-Testing-Library | See `**/*.test.ts[x]` |
+| Bundler / Dev server  | Vite              | Config in `vite.config.js` |
+| Testing               | Vitest + React-Testing-Library | See `**/*.test.js[x]` |
 | PWA                   | Custom service-worker (`service-worker.js`) + manifest |
 | Deployment            | GitHub Pages (via `npm run deploy` or GH Actions) |
 
@@ -38,12 +38,11 @@ ivotes/
   │   ├─ components/  ← Reusable React components
   │   ├─ context/     ← Global state (React Context + helpers)
   │   ├─ hooks/       ← Custom hooks
-  │   ├─ types/       ← Shared TypeScript interfaces
   │   ├─ utils/       ← Pure utility modules
-  │   ├─ App.tsx      ← Root component after boot logic
-  │   └─ main.tsx     ← ReactDOM entry & context provider
+  │   ├─ App.jsx      ← Root component after boot logic
+  │   └─ main.jsx     ← ReactDOM entry & context provider
   ├─ public assets (icons, manifest, sw)
-  ├─ vite/tailwind/ts configs
+  ├─ vite/tailwind configs
   └─ tests alongside code
 ```
 
@@ -52,8 +51,8 @@ ivotes/
 ## 4  Key Modules & Their Responsibilities
 
 ### 4.1 `src/context`
-* **`HabitsContext.tsx`** – Creates the React Context, exposes the Provider, defines the reducer, and synchronises state to `localStorage`.
-* **`habitStore.ts`** – Pure helper functions that mutate an immutable `HabitStore` object (`setActiveHabitsInStore`, `updateHabitInStore`, `toggleLogInStore`) and the `DEFAULT_HABITS` seed list.
+* **`HabitsContext.jsx`** – Creates the React Context, exposes the Provider, defines the reducer, and synchronises state to `localStorage`.
+* **`habitStore.js`** – Pure helper functions that mutate an immutable `HabitStore` object (`setActiveHabitsInStore`, `updateHabitInStore`, `toggleLogInStore`) and the `DEFAULT_HABITS` seed list.
 
 Design notes
 • State shape is intentionally minimal: `{ active: Habit[] }` only.
@@ -81,8 +80,8 @@ High-level components worth knowing:
 | `useLocalStorage` | Generic state+localStorage synchronisation (still used in some tests) |
 
 ### 4.4 `src/utils`
-* `date.ts` – Only `getLocalDateString()` right now, but isolated for easier mocking in tests
-* `appData.ts` – Utilities for demo import/export (not used heavily in production flow)
+* `date.js` – Only `getLocalDateString()` right now, but isolated for easier mocking in tests
+* `appData.js` – Utilities for demo import/export (not used heavily in production flow)
 
 ---
 
@@ -137,7 +136,7 @@ npm run test    # Vitest + jsdom + RTL
 
 ## 10  Quick Start for New Contributors
 1. **Clone** the repo and install dependencies.
-2. Skim this doc plus `src/context/HabitsContext.tsx` – that’s the heart of the state.
+2. Skim this doc plus `src/context/HabitsContext.jsx` – that’s the heart of the state.
 3. Use **Vitest watch mode** while developing: `npm run test -- --watch`.
 4. Submit PRs against `main`; GitHub Actions will run lint + test + type-check.
 

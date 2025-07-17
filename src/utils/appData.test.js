@@ -1,9 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach, SpyInstance } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { exportHabitsToFile, importHabitsFromFile, APP_VERSION } from './appData';
-import type { HabitStore } from '../types/Habit';
 
 // A minimal stub habit store for testing
-const sampleHabits: HabitStore = {
+const sampleHabits = {
   active: [
     {
       id: 1,
@@ -16,10 +15,10 @@ const sampleHabits: HabitStore = {
 };
 
 describe('exportHabitsToFile', () => {
-  let createObjectURLSpy: SpyInstance;
-  let revokeObjectURLSpy: SpyInstance;
-  let appendChildSpy: SpyInstance;
-  let removeChildSpy: SpyInstance;
+  let createObjectURLSpy;
+  let revokeObjectURLSpy;
+  let appendChildSpy;
+  let removeChildSpy;
 
   beforeEach(() => {
     createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob://dummy');
@@ -49,7 +48,7 @@ describe('importHabitsFromFile', () => {
   it('returns HabitStore for valid backup', async () => {
     const data = JSON.stringify({ version: APP_VERSION, habits: sampleHabits });
     // Minimal File mock with required text() method
-    const fileMock = { text: () => Promise.resolve(data) } as unknown as File;
+    const fileMock = { text: () => Promise.resolve(data) };
 
     const imported = await importHabitsFromFile(fileMock, APP_VERSION);
     expect(imported).toEqual(sampleHabits);
@@ -57,7 +56,7 @@ describe('importHabitsFromFile', () => {
 
   it('throws on invalid data', async () => {
     const badData = JSON.stringify({ foo: 'bar' });
-    const badFileMock = { text: () => Promise.resolve(badData) } as unknown as File;
+    const badFileMock = { text: () => Promise.resolve(badData) };
 
     await expect(importHabitsFromFile(badFileMock, APP_VERSION)).rejects.toThrow();
   });

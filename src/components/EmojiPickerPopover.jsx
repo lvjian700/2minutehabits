@@ -2,23 +2,15 @@ import React, { useRef, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
-import type { EmojiData } from "../types/EmojiData";
 import useClickOutside from "../hooks/useClickOutside";
 
-interface EmojiPickerPopoverProps {
-  anchorRef: React.RefObject<HTMLDivElement>;
-  isOpen: boolean;
-  onSelect: (emoji: EmojiData) => void;
-  onClose: () => void;
-}
-
-const EmojiPickerPopover: React.FC<EmojiPickerPopoverProps> = ({
+const EmojiPickerPopover = ({
   anchorRef,
   isOpen,
   onSelect,
   onClose,
 }) => {
-  const pickerRef = useRef<HTMLDivElement>(null);
+  const pickerRef = useRef(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [visible, setVisible] = useState(false);
 
@@ -55,7 +47,7 @@ const EmojiPickerPopover: React.FC<EmojiPickerPopoverProps> = ({
     >
       <Picker
         data={data}
-        onEmojiSelect={(emoji: EmojiData) => onSelect(emoji)}
+        onEmojiSelect={(emoji) => onSelect(emoji)}
         theme="light"
       />
     </div>,

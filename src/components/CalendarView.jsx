@@ -1,16 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import type { Habit } from '../types/Habit';
+
 import { getLocalDateString } from '../utils/date';
 
-interface CalendarViewProps {
-  habit: Habit;
-  onToggle: (date: string) => void;
-}
-
-const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle }) => {
+const CalendarView = ({ habit, onToggle }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [navButtonsVisible, setNavButtonsVisible] = useState(false);
-  const navTimeoutRef = useRef<number | null>(null);
+  const navTimeoutRef = useRef(null);
   
   const showNavButtons = () => {
     if (navTimeoutRef.current) {
@@ -46,7 +41,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ habit, onToggle }) => {
   const todayStr = getLocalDateString();
 
   const generateCalendar = () => {
-    const cells: JSX.Element[] = [];
+    const cells = [];
     ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
       cells.push(<div key={day} className="text-center font-medium text-gray-500 py-2">{day}</div>);
     });

@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import {
   Menu as MenuIcon,
   Laptop,
-  type LucideIcon,
   RefreshCcwDot,
   Apple,
 } from "lucide-react";
@@ -10,18 +9,7 @@ import { exportHabitsToFile, importHabitsFromFile } from "../utils/appData";
 import { useHabitsContext } from "../context/HabitsContext";
 import useClickOutside from "../hooks/useClickOutside";
 
-interface AppMenuProps {
-  setSelectedHabitId: (id: number | null) => void;
-  onAboutClick: () => void;
-}
-
-interface MenuItemProps {
-  label: string;
-  icon: LucideIcon;
-  onClick: () => void;
-}
-
-const MenuItem: React.FC<MenuItemProps> = ({ label, icon: Icon, onClick }) => (
+const MenuItem = ({ label, icon: Icon, onClick }) => (
   <button
     onClick={onClick}
     className={`flex items-center gap-2 w-full text-left px-4 py-1 text-gray-800 hover:bg-yellow-400 hover:text-white rounded-lg`}
@@ -31,18 +19,18 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, icon: Icon, onClick }) => (
   </button>
 );
 
-const MenuDivider: React.FC = () => (
+const MenuDivider = () => (
   <div className="h-px mx-3 my-2 bg-gray-200" />
 );
 
-const AppMenu: React.FC<AppMenuProps> = ({
+const AppMenu = ({
   setSelectedHabitId,
   onAboutClick,
 }) => {
   const { store: habits, replaceStore } = useHabitsContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef(null);
   useClickOutside(menuRef, closeMenu, { active: isMenuOpen });
 
   // Clear all habit data
@@ -67,7 +55,7 @@ const AppMenu: React.FC<AppMenuProps> = ({
     input.type = "file";
     input.accept = "application/json";
     input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
+      const file = e.target.files?.[0];
       if (!file) return;
 
       try {

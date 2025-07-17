@@ -1,7 +1,5 @@
-import type { Habit, HabitStore } from "../types/Habit";
-
 // Hardcoded habits that will be initialized on first launch
-export const DEFAULT_HABITS: Omit<Habit, "logs">[] = [
+export const DEFAULT_HABITS = [
   { id: 1, name: "Fitness", icon: "🏋️", priority: 1 },
   { id: 2, name: "Meditation", icon: "🧘", priority: 2 },
   { id: 3, name: "Wind Down for Sleep", icon: "🌙", priority: 3 },
@@ -9,13 +7,13 @@ export const DEFAULT_HABITS: Omit<Habit, "logs">[] = [
 ];
 
 export function setActiveHabitsInStore(
-  prev: HabitStore,
-  next: Habit[] | ((prevActive: Habit[]) => Habit[]),
-): HabitStore {
+  prev,
+  next,
+) {
   const previousActive = prev.active;
   const newActive =
     typeof next === "function"
-      ? (next as (p: Habit[]) => Habit[])(previousActive)
+      ? next(previousActive)
       : next;
 
   const withCorrectPriority = newActive.map((h, idx) => ({
@@ -29,10 +27,10 @@ export function setActiveHabitsInStore(
 }
 
 export function updateHabitInStore(
-  prev: HabitStore,
-  habitId: number,
-  updates: Partial<Habit>,
-): HabitStore {
+  prev,
+  habitId,
+  updates,
+) {
   return {
     active: prev.active.map((h) =>
       h.id === habitId ? { ...h, ...updates } : h,
@@ -41,11 +39,11 @@ export function updateHabitInStore(
 }
 
 export function toggleLogInStore(
-  prev: HabitStore,
-  habitId: number,
-  dateStr: string,
-): HabitStore {
-  const updateLogs = (habits: Habit[]) =>
+  prev,
+  habitId,
+  dateStr,
+) {
+  const updateLogs = (habits) =>
     habits.map((h) => {
       if (h.id !== habitId) return h;
       const currentValue = h.logs[dateStr] || false;

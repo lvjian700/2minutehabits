@@ -1,30 +1,25 @@
 import React from 'react';
 import { GripVertical } from 'lucide-react';
 import classNames from 'classnames';
-import { Habit } from '../types/Habit';
 import { getLocalDateString } from '../utils/date';
 
 // Fallback Card, CardContent, Button, Badge implementations
-const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => (
+const Card = ({ className, children, ...props }) => (
   <div className={classNames('rounded-2xl shadow-md bg-white relative overflow-hidden border border-gray-200 group transition-all', className)} {...props}>{children}</div>
 );
-const CardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => (
+const CardContent = ({ className, children, ...props }) => (
   <div className={classNames('p-6 flex flex-col items-center', className)} {...props}>{children}</div>
 );
-const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: string }> = ({ className, children, variant, ...props }) => (
+const Button = ({ className, children, variant, ...props }) => (
   <button className={classNames('px-4 py-2 rounded-full text- font-medium transition-colors duration-150 focus:outline-none',
     variant === 'secondary' ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : '',
     className)} {...props}>{children}</button>
 );
-const Badge: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({ className, children, ...props }) => (
+const Badge = ({ className, children, ...props }) => (
   <span className={classNames('px-2 py-0.5 rounded-full text-xs font-semibold', className)} {...props}>{children}</span>
 );
 
-interface DragHandleProps {
-  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
-}
-
-const DragHandle: React.FC<DragHandleProps> = ({ dragHandleProps }) => {
+const DragHandle = ({ dragHandleProps }) => {
   if (!dragHandleProps) return null;
   
   return (
@@ -34,13 +29,6 @@ const DragHandle: React.FC<DragHandleProps> = ({ dragHandleProps }) => {
   );
 };
 
-interface HabitCardProps {
-  habit: Habit;
-  onToggle: () => void;
-  onSelect: () => void;
-  order?: number; // 1-based order index, optional
-  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
-}
 
 const priorityColors = [
   'bg-red-100 text-red-800',
@@ -49,18 +37,18 @@ const priorityColors = [
   'bg-blue-100 text-blue-800',
 ];
 
-const HabitCard: React.FC<HabitCardProps> = ({ habit, onToggle, onSelect, order, dragHandleProps }) => {
+const HabitCard = ({ habit, onToggle, onSelect, order, dragHandleProps }) => {
   // Compute completion status for today directly from logs
   const todayStr = getLocalDateString();
   const completedToday = habit.logs && habit.logs[todayStr];
   const status = completedToday ? 'complete' : 'incomplete';
-  const emoji = (habit as any).emoji ?? (habit as any).icon ?? '🏆';
+  const emoji = habit.emoji ?? habit.icon ?? '🏆';
 
   // Compute completed days from logs
   const completedDays = habit.logs ? Object.values(habit.logs).filter(Boolean).length : 0;
 
   // Handle card click to open details modal
-  const handleCardClick = (e: React.MouseEvent) => {
+  const handleCardClick = (e) => {
     e.preventDefault();
     onSelect();
   };

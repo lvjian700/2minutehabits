@@ -1,15 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-interface EditableTextProps {
-  initialValue: string;
-  onSave: (newValue: string) => void;
-  textElement?: React.ElementType;
-  textClassName?: string;
-  inputClassName?: string;
-  ariaLabel?: string;
-}
-
-const EditableText: React.FC<EditableTextProps> = ({
+const EditableText = ({
   initialValue,
   onSave,
   textElement: TextElement = 'span', // Default to span if no element type is provided
@@ -19,7 +10,7 @@ const EditableText: React.FC<EditableTextProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(initialValue);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     setEditText(initialValue); // Sync with external changes to initialValue
@@ -43,7 +34,7 @@ const EditableText: React.FC<EditableTextProps> = ({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleSave();
     } else if (event.key === 'Escape') {
@@ -73,7 +64,7 @@ const EditableText: React.FC<EditableTextProps> = ({
       onClick={() => setIsEditing(true)}
       role="button" // Make it clear it's interactive
       tabIndex={0} // Make it focusable
-      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') setIsEditing(true);}} // Allow activation with Enter/Space
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsEditing(true);}} // Allow activation with Enter/Space
       aria-label={ariaLabel}
     >
       {initialValue} {/* Always display the persisted initialValue when not editing */}

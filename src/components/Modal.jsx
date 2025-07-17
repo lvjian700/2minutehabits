@@ -1,14 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-  dialogClassName?: string;
-  closeOnOutsideClick?: boolean;
-}
-
-const Modal: React.FC<ModalProps> = ({
+const Modal = ({
   isOpen,
   onClose,
   children,

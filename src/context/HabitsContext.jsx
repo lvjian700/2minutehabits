@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import type { Habit, HabitStore } from '../types/Habit';
 import {
   DEFAULT_HABITS,
   setActiveHabitsInStore,
@@ -7,35 +6,22 @@ import {
   toggleLogInStore,
 } from './habitStore';
 
-interface HabitsContextValue {
-  store: HabitStore;
-  habits: Habit[];
-  activeHabits: Habit[];
-  setActiveHabits: (next: Habit[] | ((prev: Habit[]) => Habit[])) => void;
-  updateHabit: (id: number, updates: Partial<Habit>) => void;
-  toggleLog: (id: number, date: string) => void;
-  replaceStore: (next: HabitStore) => void;
-}
 
-const HabitsContext = createContext<HabitsContextValue | undefined>(undefined);
+const HabitsContext = createContext(undefined);
 
-type Action =
-  | { type: 'setActiveHabits'; next: Habit[] | ((prev: Habit[]) => Habit[]) }
-  | { type: 'updateHabit'; id: number; updates: Partial<Habit> }
-  | { type: 'toggleLog'; id: number; date: string }
-  | { type: 'replace'; store: HabitStore };
 
-function initStore(): HabitStore {
+
+function initStore() {
   try {
     const item = localStorage.getItem('habits');
-    if (item) return JSON.parse(item) as HabitStore;
+    if (item) return JSON.parse(item);
   } catch (err) {
     console.warn(err);
   }
   return { active: DEFAULT_HABITS.map((h) => ({ ...h, logs: {} })) };
 }
 
-export function habitsReducer(state: HabitStore, action: Action): HabitStore {
+export function habitsReducer(state, action) {
   switch (action.type) {
     case 'setActiveHabits':
       return setActiveHabitsInStore(state, action.next);
@@ -50,7 +36,7 @@ export function habitsReducer(state: HabitStore, action: Action): HabitStore {
   }
 }
 
-export const HabitsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const HabitsProvider = ({ children }) => {
   const [store, dispatch] = useReducer(habitsReducer, undefined, initStore);
 
   useEffect(() => {
@@ -61,7 +47,7 @@ export const HabitsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [store]);
 
-  const value: HabitsContextValue = {
+  const value = {
     store,
     habits: store.active,
     activeHabits: store.active,

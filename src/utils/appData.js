@@ -1,5 +1,4 @@
 import { getLocalDateString } from './date';
-import type { HabitStore } from '../types/Habit';
 
 // Current app version constant can be re-exported for reuse
 export const APP_VERSION = '0.2.0';
@@ -7,7 +6,7 @@ export const APP_VERSION = '0.2.0';
 /**
  * Trigger download of the user's habit data as a JSON backup file.
  */
-export function exportHabitsToFile(habits: HabitStore, version: string = APP_VERSION): void {
+export function exportHabitsToFile(habits, version = APP_VERSION) {
   const exportData = {
     version,
     habits: {
@@ -31,9 +30,9 @@ export function exportHabitsToFile(habits: HabitStore, version: string = APP_VER
  * Throws an error if the format is invalid or the version mismatches.
  */
 export async function importHabitsFromFile(
-  file: File,
-  expectedVersion: string = APP_VERSION
-): Promise<HabitStore> {
+  file,
+  expectedVersion = APP_VERSION
+) {
   const text = await file.text();
   const importedData = JSON.parse(text);
 
@@ -41,7 +40,7 @@ export async function importHabitsFromFile(
     importedData.version === expectedVersion &&
     importedData.habits?.active
   ) {
-    return importedData.habits as HabitStore;
+    return importedData.habits;
   }
   throw new Error('Invalid data format');
 }
