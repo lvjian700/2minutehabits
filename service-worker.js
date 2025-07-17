@@ -70,17 +70,21 @@ async function precacheAssets() {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      Promise.all(
+    (async () => {
+      const cacheNames = await caches.keys();
+      await Promise.all(
         cacheNames
           .filter((name) => name !== CACHE_NAME)
           .map((name) => caches.delete(name)),
       );
-      const clients = self.clients.matchAll({ includeUncontrolled: true });
+
+      const clients = await self.clients.matchAll({
+        includeUncontrolled: true,
+      });
       for (const client of clients) {
         client.postMessage({ type: "SW_UPDATED" });
       }
-    }),
+    })(),
   );
   self.clients.claim();
 });
