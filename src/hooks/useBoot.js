@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { getLocalDateString } from '../utils/date';
+import { useState, useEffect } from "react";
+import { getLocalDateString } from "../utils/date";
 
 /**
  * Hook to handle app initialization, service worker updates, and date refresh
@@ -9,8 +9,8 @@ export const useBoot = () => {
 
   // Handle service worker updates
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
         window.location.reload();
       });
     }
@@ -19,7 +19,7 @@ export const useBoot = () => {
   // Handle visibility refresh when date changes
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === "visible") {
         const currentDate = getLocalDateString();
         if (currentDate !== lastDate) {
           setLastDate(currentDate);
@@ -30,11 +30,11 @@ export const useBoot = () => {
     };
 
     // Add event listener for visibility changes
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     // Clean up
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [lastDate]);
 };
