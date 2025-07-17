@@ -4,7 +4,8 @@ const CACHE_NAME = "2-minutes-habits-cache-v5";
 // Determine the base path from the service worker scope so it works on both
 // GitHub Pages and the custom domain. If the scope path is just '/', use an
 // empty string to avoid double slashes.
-const scopePath = new URL(self.registration.scope).pathname;
+const scope = self.registration.scope;
+const scopePath = new URL(scope).pathname;
 const BASE_PATH = scopePath === "/" ? "" : scopePath.replace(/\/$/, "");
 
 // For debugging
