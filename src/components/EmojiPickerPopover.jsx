@@ -1,15 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import useClickOutside from "../hooks/useClickOutside";
 
-const EmojiPickerPopover = ({
-  anchorRef,
-  isOpen,
-  onSelect,
-  onClose,
-}) => {
+const EmojiPickerPopover = ({ anchorRef, isOpen, onSelect, onClose }) => {
   const pickerRef = useRef(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [visible, setVisible] = useState(false);

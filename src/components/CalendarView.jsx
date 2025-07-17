@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 
-import { getLocalDateString } from '../utils/date';
+import { getLocalDateString } from "../utils/date";
 
 const CalendarView = ({ habit, onToggle }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [navButtonsVisible, setNavButtonsVisible] = useState(false);
   const navTimeoutRef = useRef(null);
-  
+
   const showNavButtons = () => {
     if (navTimeoutRef.current) {
       window.clearTimeout(navTimeoutRef.current);
@@ -42,8 +42,12 @@ const CalendarView = ({ habit, onToggle }) => {
 
   const generateCalendar = () => {
     const cells = [];
-    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
-      cells.push(<div key={day} className="text-center font-medium text-gray-500 py-2">{day}</div>);
+    ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach((day) => {
+      cells.push(
+        <div key={day} className="text-center font-medium text-gray-500 py-2">
+          {day}
+        </div>,
+      );
     });
     for (let i = 0; i < startDay; i++) {
       cells.push(<div key={"empty-" + i} />);

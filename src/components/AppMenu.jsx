@@ -1,10 +1,5 @@
-import React, { useState, useRef } from "react";
-import {
-  Menu as MenuIcon,
-  Laptop,
-  RefreshCcwDot,
-  Apple,
-} from "lucide-react";
+import { useState, useRef } from "react";
+import { Menu as MenuIcon, Laptop, RefreshCcwDot, Apple } from "lucide-react";
 import { exportHabitsToFile, importHabitsFromFile } from "../utils/appData";
 import { useHabitsContext } from "../context/HabitsContext";
 import useClickOutside from "../hooks/useClickOutside";
@@ -19,14 +14,9 @@ const MenuItem = ({ label, icon: Icon, onClick }) => (
   </button>
 );
 
-const MenuDivider = () => (
-  <div className="h-px mx-3 my-2 bg-gray-200" />
-);
+const MenuDivider = () => <div className="h-px mx-3 my-2 bg-gray-200" />;
 
-const AppMenu = ({
-  setSelectedHabitId,
-  onAboutClick,
-}) => {
+const AppMenu = ({ setSelectedHabitId, onAboutClick }) => {
   const { store: habits, replaceStore } = useHabitsContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);

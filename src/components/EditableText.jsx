@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 const EditableText = ({
   initialValue,
   onSave,
-  textElement: TextElement = 'span', // Default to span if no element type is provided
-  textClassName = '',
-  inputClassName = '',
-  ariaLabel = 'editable text'
+  textElement: TextElement = "span", // Default to span if no element type is provided
+  textClassName = "",
+  inputClassName = "",
+  ariaLabel = "editable text",
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(initialValue);
@@ -35,9 +35,9 @@ const EditableText = ({
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSave();
-    } else if (event.key === 'Escape') {
+    } else if (event.key === "Escape") {
       setEditText(initialValue);
       setIsEditing(false);
     }
@@ -64,10 +64,13 @@ const EditableText = ({
       onClick={() => setIsEditing(true)}
       role="button" // Make it clear it's interactive
       tabIndex={0} // Make it focusable
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsEditing(true);}} // Allow activation with Enter/Space
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") setIsEditing(true);
+      }} // Allow activation with Enter/Space
       aria-label={ariaLabel}
     >
-      {initialValue} {/* Always display the persisted initialValue when not editing */}
+      {initialValue}{" "}
+      {/* Always display the persisted initialValue when not editing */}
     </TextElement>
   );
 };

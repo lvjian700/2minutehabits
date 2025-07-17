@@ -1,4 +1,3 @@
-// Hardcoded habits that will be initialized on first launch
 export const DEFAULT_HABITS = [
   { id: 1, name: "Fitness", icon: "🏋️", priority: 1 },
   { id: 2, name: "Meditation", icon: "🧘", priority: 2 },
@@ -6,15 +5,9 @@ export const DEFAULT_HABITS = [
   { id: 4, name: "No Sugar Drinks", icon: "🥤", priority: 4 },
 ];
 
-export function setActiveHabitsInStore(
-  prev,
-  next,
-) {
+export function setActiveHabitsInStore(prev, next) {
   const previousActive = prev.active;
-  const newActive =
-    typeof next === "function"
-      ? next(previousActive)
-      : next;
+  const newActive = typeof next === "function" ? next(previousActive) : next;
 
   const withCorrectPriority = newActive.map((h, idx) => ({
     ...h,
@@ -26,11 +19,7 @@ export function setActiveHabitsInStore(
   };
 }
 
-export function updateHabitInStore(
-  prev,
-  habitId,
-  updates,
-) {
+export function updateHabitInStore(prev, habitId, updates) {
   return {
     active: prev.active.map((h) =>
       h.id === habitId ? { ...h, ...updates } : h,
@@ -38,11 +27,7 @@ export function updateHabitInStore(
   };
 }
 
-export function toggleLogInStore(
-  prev,
-  habitId,
-  dateStr,
-) {
+export function toggleLogInStore(prev, habitId, dateStr) {
   const updateLogs = (habits) =>
     habits.map((h) => {
       if (h.id !== habitId) return h;
