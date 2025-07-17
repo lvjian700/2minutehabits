@@ -8,7 +8,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist -r git@github.com:lvjian700/ihahits.git",
+    "deploy": "gh-pages -d dist -r git@github.com:lvjian700/2minutehabits.git",
     "test": "vitest run"
   },
   "dependencies": {
