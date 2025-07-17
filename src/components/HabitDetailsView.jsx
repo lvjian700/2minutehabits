@@ -6,12 +6,9 @@ import EditableText from "./EditableText";
 import EmojiPickerPopover from "./EmojiPickerPopover";
 import { useHabitsContext } from "../context/HabitsContext";
 
-const HabitDetailsView = ({
-  habitId,
-  onClose,
-}) => {
+const HabitDetailsView = ({ habitId, onClose }) => {
   const { habits, updateHabit, toggleLog } = useHabitsContext();
-  const habit = habits.find((h) => h.id === habitId)!;
+  const habit = habits.find((h) => h.id === habitId);
   const buttonRef = useRef(null);
   const [editingIcon, setEditingIcon] = useState(false);
   const [habitIcon, setHabitIcon] = useState(habit.icon || "🏆");

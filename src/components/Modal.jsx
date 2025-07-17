@@ -1,13 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
-const Modal = ({
-  isOpen,
-  onClose,
-  children,
-  dialogClassName,
-}) => {
+const Modal = ({ isOpen, onClose, children, dialogClassName }) => {
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
+    const handleEscape = (event) => {
       if (event.key === "Escape") {
         onClose();
       }
