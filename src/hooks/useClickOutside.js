@@ -1,20 +1,15 @@
-import { RefObject, useEffect } from 'react';
-
-export interface ClickOutsideOptions {
-  active?: boolean;
-  ignoreRefs?: RefObject<HTMLElement>[];
-}
+import { useEffect } from 'react';
 
 export default function useClickOutside(
-  ref: RefObject<HTMLElement>,
-  handler: () => void,
-  { active = true, ignoreRefs = [] }: ClickOutsideOptions = {}
+  ref,
+  handler,
+  { active = true, ignoreRefs = [] } = {}
 ) {
   useEffect(() => {
     if (!active) return;
 
-    const listener = (event: MouseEvent | TouchEvent) => {
-      const target = event.target as Node;
+    const listener = (event) => {
+      const target = event.target;
       if (!ref.current || ref.current.contains(target)) return;
       if (ignoreRefs.some(r => r.current && r.current.contains(target))) return;
       handler();

@@ -31,7 +31,7 @@ A React Context provides a single source of truth for the habit data. By wrappin
    - Internally use `useReducer` to update state. The reducer can reuse existing helper functions (`setActiveHabitsInStore`, etc.).
    - Persist the state to `localStorage` whenever it changes.
 3. **Replace direct calls to `useHabits`.**
-   - Wrap `<App />` in `<HabitsProvider>` in `main.tsx`.
+   - Wrap `<App />` in `<HabitsProvider>` in `main.jsx`.
    - Replace `useHabits()` calls with `useContext(HabitsContext)` wherever the
      habit data is needed (`App`, `AppMenu`, etc.).
 4. **Update tests.**
@@ -54,7 +54,7 @@ management via React Context, avoiding duplication and potential sync issues.
    - Add `HabitsContext` and `HabitsProvider` in a new `src/context` folder.
    - Move the logic from `useHabits` into the provider using `useReducer`.
 2. **Update component tree**
-   - Wrap `<App />` with `<HabitsProvider>` in `src/main.tsx`.
+   - Wrap `<App />` with `<HabitsProvider>` in `src/main.jsx`.
    - Replace `useHabits` imports with `useContext(HabitsContext)` in components.
 3. **Persist state and actions**
    - Reuse helpers like `setActiveHabitsInStore` for the reducer.

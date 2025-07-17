@@ -5,20 +5,9 @@ import { CSS } from '@dnd-kit/utilities';
 import HabitCard from './HabitCard';
 import { getLocalDateString } from '../utils/date';
 import { useHabitsContext } from '../context/HabitsContext';
-import type { Habit } from '../types/Habit';
 
-interface HabitsDndGridProps {
-  onSelect: (habitId: number) => void;
-}
 
-interface SortableHabitCardProps {
-  habit: Habit;
-  idx: number;
-  onToggle: (id: number) => void;
-  onSelect: (id: number) => void;
-}
-
-function SortableHabitCard({ habit, idx, onToggle, onSelect }: SortableHabitCardProps) {
+function SortableHabitCard({ habit, idx, onToggle, onSelect }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: habit.id });
 
   return (
@@ -49,7 +38,7 @@ function SortableHabitCard({ habit, idx, onToggle, onSelect }: SortableHabitCard
   );
 }
 
-const HabitsDndGrid: React.FC<HabitsDndGridProps> = ({ onSelect }) => {
+const HabitsDndGrid = ({ onSelect }) => {
   const { activeHabits, setActiveHabits, toggleLog } = useHabitsContext();
   const habits = activeHabits;
 
@@ -57,7 +46,7 @@ const HabitsDndGrid: React.FC<HabitsDndGridProps> = ({ onSelect }) => {
     useSensor(PointerSensor, { activationConstraint: { distance: 1 } })
   );
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event) => {
     const { active, over } = event;
     if (active.id !== over?.id) {
       const oldIndex = habits.findIndex(h => h.id === active.id);

@@ -1,6 +1,6 @@
 # 2-Minute Habits
 
-A simple daily habit tracker built with React, TypeScript, Vite, and Tailwind CSS.
+A simple daily habit tracker built with React, JavaScript, Vite, and Tailwind CSS.
 
 ## Live Demo
 

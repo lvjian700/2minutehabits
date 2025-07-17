@@ -4,21 +4,15 @@ import { X } from "lucide-react";
 import CalendarView from "./CalendarView";
 import EditableText from "./EditableText";
 import EmojiPickerPopover from "./EmojiPickerPopover";
-import type { EmojiData } from "../types/EmojiData";
 import { useHabitsContext } from "../context/HabitsContext";
 
-interface HabitDetailsViewProps {
-  habitId: number;
-  onClose: () => void;
-}
-
-const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({
+const HabitDetailsView = ({
   habitId,
   onClose,
 }) => {
   const { habits, updateHabit, toggleLog } = useHabitsContext();
   const habit = habits.find((h) => h.id === habitId)!;
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef(null);
   const [editingIcon, setEditingIcon] = useState(false);
   const [habitIcon, setHabitIcon] = useState(habit.icon || "🏆");
 
@@ -26,7 +20,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({
     setHabitIcon(habit.icon || "🏆");
   }, [habit.icon]);
 
-  const emojiIconRef = useRef<HTMLDivElement>(null);
+  const emojiIconRef = useRef(null);
 
   // Compute completed days from logs
   const completedDays = habit.logs
@@ -34,7 +28,7 @@ const HabitDetailsView: React.FC<HabitDetailsViewProps> = ({
     : 0;
   const emoji = habitIcon;
 
-  const handleSelectEmoji = (emojiData: EmojiData) => {
+  const handleSelectEmoji = (emojiData) => {
     setHabitIcon(emojiData.native);
     setEditingIcon(false);
     updateHabit(habit.id, { icon: emojiData.native });

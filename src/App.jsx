@@ -6,11 +6,11 @@ import AppMenu from "./components/AppMenu";
 import AboutTheApp from "./components/AboutTheApp";
 import { useBoot } from "./hooks/useBoot";
 
-const App: React.FC = () => {
+const App = () => {
   // Handle app initialization, service worker updates, and date refresh
   useBoot();
 
-  const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
+  const [selectedHabitId, setSelectedHabitId] = useState(null);
   const [isAboutOpen, setAboutOpen] = useState(false);
 
   return (
