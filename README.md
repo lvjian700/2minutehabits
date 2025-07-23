@@ -1,21 +1,23 @@
 # 2-Minute Habits
 
-A simple daily habit tracker built with React, JavaScript, Vite, and Tailwind CSS.
+A Repo for simple daily habit tracker.
 
-## Live Demo
-
-Experience the app at:
-
-https://2minutehabits.app
+👉 https://2minutehabits.app
 
 ## Features
 
-- Track 4 core habits
-- Track daily completion with current and maximum streaks
-- View and backfill habit history in a monthly calendar
-- Fully client‑side, data stored in localStorage
+Inspired by Atomic Habits:
+> Every action you take is a vote for the type of person you wish to become.
 
-## Getting Started
+Focusing on 4 habits that matter most to you, such as:
+- Fitness
+- Meditation
+- Prioritize Sleep
+- Cutting Intaken from Sugar Drinks
+
+Keep track of your progress and celebrate your achievements daily, becoming the person you wish to be, live healthier, calmer, and happier for every moment of your life.
+
+## For Contributors
 
 ### Prerequisites
 
